@@ -1,0 +1,20 @@
+{% extends "base.html" %} {% block content %} Open Opportunities
+
+<table class="table table-striped table-bordered dt-responsive nowrap">
+    <thead>
+        <th>Company Name</th>
+        <th>Stack</th>
+        <th>$Min </th>
+    </thead>
+    <tbody>
+        {% for o in opportunities %}
+        <tr>
+            <td>{{ o.company_name }} </td>
+            <td>{{ o.stack }}</td>
+            <td>{{ o.posted_minimum }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <ul>
+    </ul>
+    {% endblock %}
