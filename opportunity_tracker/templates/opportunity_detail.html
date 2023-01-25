@@ -1,0 +1,42 @@
+{% extends "base.html" %} {% block content %}
+<h1>Opportunity</h1>
+<div class="container table-striped">
+    <div class="row">
+        <div class="col-2">Company Name</div>
+        <div class="col">{{ o.company_name }}</div>
+        <div class="col-8"></div>
+    </div>
+    <div class="row">
+        <div class="col-2">Tech Stack</div>
+        <div class="col">{{ o.stack }}</div>
+        <div class="col-8"></div>
+    </div>
+    <div class="row">
+        <div class="col-2">Salary Minimum</div>
+        <div class="col">$ {{ o.posted_minimum }}</div>
+        <div class="col-8"></div>
+    </div>
+    <div class="row">
+        <div class="col-2">Stage</div>
+        <div class="col">{{ o.stage }}</div>
+        <div class="col-8"></div>
+    </div>
+</div>
+<hr/>
+
+
+<table class="table table-striped table-bordered dt-responsive nowrap">
+    <thead>
+        <th>Date</th>
+        <th>Note</th>
+    </thead>
+    <tbody>
+        {% for n in notes %}
+        <tr>
+            <td>{{ n.date }} </td>
+            <td>{{ n.note }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+    {% endblock %}

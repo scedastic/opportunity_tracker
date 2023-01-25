@@ -9,12 +9,10 @@
     <tbody>
         {% for o in opportunities %}
         <tr>
-            <td>{{ o.company_name }} </td>
+            <td><a href="{% url 'opportunity_view' o.id %}">{{ o.company_name }}</a> </td>
             <td>{{ o.stack }}</td>
             <td>{{ o.posted_minimum }}</td>
         </tr>
         {% endfor %}
     </tbody>
-    <ul>
-    </ul>
     {% endblock %}

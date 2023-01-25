@@ -1,0 +1,11 @@
+[{
+        "model": "stage",
+        "pk": 1,
+        "name": "Applied"
+    },
+    {
+        "model": "stage",
+        "pk": 2,
+        "name": "Phone Call"
+    }
+]
