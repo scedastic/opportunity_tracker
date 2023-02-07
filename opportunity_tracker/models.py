@@ -9,6 +9,9 @@ class Stage(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+    
+    class Meta:
+        ordering = ["rank"]
 
 
 class Opportunity(models.Model):
@@ -35,7 +38,7 @@ class Notes(models.Model):
     note = models.TextField()
 
     def __str__(self):
-        return f"{opportunity.company_name} Note: {self.date}"
+        return f"{self.opportunity.company_name} Note: {self.date}"
 
     class Meta:
         verbose_name_plural = "Notes"
