@@ -5,6 +5,7 @@
         <th>Company Name</th>
         <th>Stack</th>
         <th>$Min </th>
+        <th>Stage </th>
     </thead>
     <tbody>
         {% for o in opportunities %}
@@ -12,6 +13,7 @@
             <td><a href="{% url 'opportunity_view' o.id %}">{{ o.company_name }}</a> </td>
             <td>{{ o.stack }}</td>
             <td>{{ o.posted_minimum }}</td>
+            <td>{{ o.stage }}</td>
         </tr>
         {% endfor %}
     </tbody>
