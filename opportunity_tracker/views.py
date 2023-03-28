@@ -10,7 +10,7 @@ def dashboard(request):
     return render(
         request,
         "dashboard.html",
-        {"page_title": "Opportunities", "opportunities": opportunities},
+        {"page_title": "Open Opportunities", "opportunities": opportunities},
     )
 
 
