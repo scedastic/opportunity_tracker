@@ -24,7 +24,7 @@ def opportunity_view(request, opportunity_id):
     
 def all_opportunities(request):
     """Show all open opportunities, open and expired."""
-    opportunities = Opportunity.objects.all()
+    opportunities = Opportunity.objects.all().order_by("stage")
     return render(
         request,
         "dashboard.html",
