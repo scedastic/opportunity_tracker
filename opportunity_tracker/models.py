@@ -37,7 +37,6 @@ class Notes(models.Model):
     opportunity = models.ForeignKey(Opportunity, on_delete=models.CASCADE)
     date = models.DateField()
     note = models.TextField()
-    follow_up = models.BooleanField(default=False, help_text="Needs Follow up?")
 
     def __str__(self):
         return f"{self.opportunity.company_name} Note: {self.date}"
@@ -64,3 +63,7 @@ class FollowUp(models.Model):
     id = models.AutoField(primary_key=True)
     opportunity = models.ForeignKey(Opportunity, on_delete=models.CASCADE)
     follow_up_date = models.DateField(blank=True, null=True)
+    completed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.opportunity}"
