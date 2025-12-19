@@ -66,4 +66,4 @@ class FollowUp(models.Model):
     completed = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.opportunity}"
+        return f"{self.follow_up_date} - {self.opportunity}"

@@ -10,11 +10,8 @@
         <h1>{{ page_title }}</h1>
 
         {% block content %} {% endblock %}
+        {% include 'footer.html' %}
     </div>
-    <footer>
-        <a href="{% url 'all_opportunities' %}">All Opportunities</a>
-        <a href="{% url 'dashboard' %}">Open Opportunities</a>
-    </footer>
 </body>
 
 </html>

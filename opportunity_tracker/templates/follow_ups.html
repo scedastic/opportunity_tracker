@@ -1,0 +1,21 @@
+{% extends "base.html" %} 
+{% block content %} 
+    <table class="table table-striped table-bordered dt-responsive nowrap">
+        <thead>
+            <th>Date</th>
+            <th>Company</th>
+            <th>Position</th>
+            <th>Completed?</th>
+        </thead>
+        <tbody>
+            {% for f in follow_ups %}
+            <tr>
+                <td>{{ f.follow_up_date }}</td>
+                <td>{{ f.opportunity.company_name }}</td>
+                <td>{{ f.opportunity.job_title }}</td>
+                <td>{{ f.completed }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
