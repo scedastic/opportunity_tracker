@@ -15,11 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import all_opportunities, dashboard, opportunity_view, current_follow_ups
+from .views import all_opportunities, open_opportunities, opportunity_view, current_follow_ups
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", dashboard, name="dashboard"),
+    path("", open_opportunities, name="open-opportunities"),
     path("opportunity/<int:opportunity_id>/", opportunity_view, name="opportunity_view"),
     path("all/", all_opportunities, name="all-opportunities"),
     path("followups/", current_follow_ups, name="current-follow-ups")

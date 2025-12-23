@@ -25,7 +25,10 @@ class Opportunity(models.Model):
     stage = models.ForeignKey(Stage, on_delete=models.PROTECT)
 
     def __str__(self):
-        return f"{self.company_name} {self.stack}  ${self.posted_minimum}"
+        return_str = f"{self.company_name} {self.stack}"
+        if self.posted_minimum > 0: 
+            return_str += f" ${self.posted_minimum}"
+        return return_str
 
     class Meta:
         verbose_name_plural = "Opportunities"
