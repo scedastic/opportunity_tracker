@@ -7,13 +7,24 @@
         <div class="col-8"></div>
     </div>
     <div class="row">
+        <div class="col-2">Job Title</div>
+        <div class="col">{{ o.job_title }}</div>
+        <div class="col-8"></div>
+    </div>
+    <div class="row">
         <div class="col-2">Tech Stack</div>
         <div class="col">{{ o.stack }}</div>
         <div class="col-8"></div>
     </div>
     <div class="row">
-        <div class="col-2">Salary Minimum</div>
-        <div class="col">$ {{ o.posted_minimum }}</div>
+        <div class="col-2">Salary Minimum</div>   
+        <div class="col">     
+        {% if o.posted_minimum > 0 %}
+            $ {{ o.posted_minimum }}
+        {% else %}
+            <span class="font-italic">Unknown</span>
+        {% endif %}
+        </div>
         <div class="col-8"></div>
     </div>
     <div class="row">

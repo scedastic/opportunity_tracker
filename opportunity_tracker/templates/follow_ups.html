@@ -13,7 +13,13 @@
                 <td>{{ f.follow_up_date }}</td>
                 <td>{{ f.opportunity.company_name }}</td>
                 <td>{{ f.opportunity.job_title }}</td>
-                <td>{{ f.completed }}</td>
+                <td>
+                    {% if f.completed %}
+                        {% include 'svg/check_mark' %}
+                    {% else %}
+                        {% include 'svg/x_mark' %}                    
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>
