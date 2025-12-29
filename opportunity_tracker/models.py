@@ -23,6 +23,7 @@ class Opportunity(models.Model):
     requirements = models.CharField(max_length=255, db_index=True)
     open = models.BooleanField(default=True)
     stage = models.ForeignKey(Stage, on_delete=models.PROTECT)
+    initiation_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return_str = f"{self.company_name} {self.stack}"
@@ -65,6 +66,7 @@ class Contact(models.Model):
 class FollowUp(models.Model):
     id = models.AutoField(primary_key=True)
     opportunity = models.ForeignKey(Opportunity, on_delete=models.CASCADE)
+    contact = models.ForeignKey(Contact, on_delete=models.SET_NULL, null=True, blank=True)
     follow_up_date = models.DateField(blank=True, null=True)
     completed = models.BooleanField(default=False)
 
