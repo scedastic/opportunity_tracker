@@ -9,12 +9,12 @@
     <div class="row">
         <div class="col-2">Job Title</div>
         <div class="col">{{ o.job_title }}</div>
-        <div class="col-8"></div>
+        <div class="col-6"></div>
     </div>
     <div class="row">
         <div class="col-2">Tech Stack</div>
         <div class="col">{{ o.stack }}</div>
-        <div class="col-8"></div>
+        <div class="col-6"></div>
     </div>
     <div class="row">
         <div class="col-2">Salary Minimum</div>   
@@ -25,12 +25,12 @@
             <span class="font-italic">Unknown</span>
         {% endif %}
         </div>
-        <div class="col-8"></div>
+        <div class="col-6"></div>
     </div>
     <div class="row">
         <div class="col-2">Stage</div>
         <div class="col">{{ o.stage }}</div>
-        <div class="col-8"></div>
+        <div class="col-6"></div>
     </div>
 </div>
 <hr/>
@@ -50,5 +50,5 @@
         {% endfor %}
     </tbody>
 </table>
-<p><a href="{% url 'dashboard' %}">Go to List</a></p>
+<p><a href="{% url 'open-opportunities' %}">Go to List</a></p>
     {% endblock %}

@@ -1,5 +1,6 @@
 import datetime
-from django.shortcuts import render
+from django.db.models import Q
+from django.shortcuts import get_object_or_404, render
 from .models import Opportunity, Notes, FollowUp, Contact
 
 
@@ -25,7 +26,7 @@ def all_opportunities(request):
 
 def opportunity_view(request, opportunity_id):
     """Details about a specific opportunity"""
-    opportunity = Opportunity.objects.get(pk=opportunity_id)
+    opportunity = get_object_or_404(Opportunity, pk=opportunity_id)
     notes = Notes.objects.filter(opportunity=opportunity)
     return render(
         request, "opportunity_detail.html", {"o": opportunity, "notes": notes}
@@ -34,7 +35,11 @@ def opportunity_view(request, opportunity_id):
 
 def current_follow_ups(request):
     """Show all FollowUps for the next 7 days."""
-    follow_ups = FollowUp.objects.filter(follow_up_date__gte=datetime.date.today())
+    # follow_ups = FollowUp.objects.filter(follow_up_date__gte=datetime.date.today())
+    follow_ups = FollowUp.objects.filter(
+        Q(follow_up_date__gte=datetime.date.today()) |
+        Q(completed=False)
+    ).order_by("follow_up_date")
     return render(
         request,
         "follow_ups.html",
