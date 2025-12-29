@@ -5,8 +5,19 @@ admin.site.site_title = "Opportunity Tracker site administration"
 admin.site.site_header = "Opportunity Tracker administration"
 admin.site.index_title = "Opportunity Tracker administration"
 
-admin.site.register(Opportunity)
+class OpportunityAdmin(admin.ModelAdmin):
+    list_display = ('company_name', 'job_title', 'stack', 'open')
+    search_fields = ('company_name', 'job_title', 'stack', 'assigned_to__username', 'stage__name')
+    list_filter = ('stage', 'open')
+
+
+class NotesAdmin(admin.ModelAdmin):
+    list_display = ('opportunity', 'date', 'note')
+    search_fields = ('opportunity__company_name', 'note')
+    list_filter = ('date','opportunity__company_name')
+
+admin.site.register(Opportunity, OpportunityAdmin)
 admin.site.register(Contact)
 admin.site.register(FollowUp)
-admin.site.register(Notes)
+admin.site.register(Notes, NotesAdmin)
 admin.site.register(Stage)
