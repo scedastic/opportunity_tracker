@@ -37,8 +37,10 @@ def current_follow_ups(request):
     """Show all FollowUps for the next 7 days."""
     # follow_ups = FollowUp.objects.filter(follow_up_date__gte=datetime.date.today())
     follow_ups = FollowUp.objects.filter(
-        Q(follow_up_date__gte=datetime.date.today()) |
-        Q(completed=False)
+        Q(opportunity__open=True) & (
+            Q(follow_up_date__gte=datetime.date.today()) |
+            Q(completed=False)
+        )
     ).order_by("follow_up_date")
     return render(
         request,
