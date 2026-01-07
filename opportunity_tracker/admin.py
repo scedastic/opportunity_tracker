@@ -11,17 +11,24 @@ class OpportunityAdmin(admin.ModelAdmin):
     list_filter = ('stage', 'open')
 
 
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('name','opportunity')
+    search_fields = ('opportunity__company_name',)
+
+
 class NotesAdmin(admin.ModelAdmin):
     list_display = ('opportunity', 'date', 'note')
     search_fields = ('opportunity__company_name', 'note')
     list_filter = ('date','opportunity__company_name')
 
+
 class FollowUpAdmin(admin.ModelAdmin):
     list_display = ('opportunity','follow_up_date','completed')
     list_filter = ('opportunity__open','completed')
 
+
 admin.site.register(Opportunity, OpportunityAdmin)
-admin.site.register(Contact)
+admin.site.register(Contact, ContactAdmin)
 admin.site.register(FollowUp, FollowUpAdmin)
 admin.site.register(Notes, NotesAdmin)
 admin.site.register(Stage)
