@@ -72,3 +72,6 @@ class FollowUp(models.Model):
 
     def __str__(self):
         return f"{self.follow_up_date} - {self.opportunity}"
+
+    class Meta:
+        ordering = ["follow_up_date"]   
