@@ -16,8 +16,12 @@ class NotesAdmin(admin.ModelAdmin):
     search_fields = ('opportunity__company_name', 'note')
     list_filter = ('date','opportunity__company_name')
 
+class FollowUpAdmin(admin.ModelAdmin):
+    list_display = ('opportunity','follow_up_date','completed')
+    list_filter = ('opportunity__open','completed')
+
 admin.site.register(Opportunity, OpportunityAdmin)
 admin.site.register(Contact)
-admin.site.register(FollowUp)
+admin.site.register(FollowUp, FollowUpAdmin)
 admin.site.register(Notes, NotesAdmin)
 admin.site.register(Stage)
