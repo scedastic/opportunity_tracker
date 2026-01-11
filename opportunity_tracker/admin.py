@@ -7,7 +7,7 @@ admin.site.index_title = "Opportunity Tracker administration"
 
 class OpportunityAdmin(admin.ModelAdmin):
     list_display = ('company_name', 'job_title', 'stack', 'open')
-    search_fields = ('company_name', 'job_title', 'stack', 'assigned_to__username', 'stage__name')
+    search_fields = ('company_name', 'job_title', 'stack', 'stage__name')
     list_filter = ('stage', 'open')
 
 
