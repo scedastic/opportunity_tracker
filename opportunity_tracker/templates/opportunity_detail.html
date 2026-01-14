@@ -62,7 +62,12 @@
         {% for f in follow_ups %}
         <tr>
             <td>{{ f.follow_up_date }} </td>
-            <td>{{ f.completed }}</td>
+            <td>
+                {% if f.completed %}
+                    {% include 'svg/check_mark' %}
+                {% else %}
+                    {% include 'svg/x_mark' %}                    
+                {% endif %}</td>
             <td>
                 {% if not f.completed %}
                 <a class="btn btn-success" href="{% url 'complete-follow-up' f.id %}">Mark as Completed</a>
