@@ -63,6 +63,11 @@
         <tr>
             <td>{{ f.follow_up_date }} </td>
             <td>{{ f.completed }}</td>
+            <td>
+                {% if not f.completed %}
+                <a class="btn btn-success" href="{% url 'complete-follow-up' f.id %}">Mark as Completed</a>
+                {% endif %}
+            </td>
         </tr>
         {% endfor %}
     </tbody>

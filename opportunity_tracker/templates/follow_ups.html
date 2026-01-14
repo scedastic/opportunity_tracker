@@ -26,6 +26,11 @@
                             {% include 'svg/x_mark' %}                    
                         {% endif %}
                     </td>
+                    <td>
+                        {% if not f.completed %}
+                        <a class="btn btn-success" href="{% url 'complete-follow-up' f.id %}">Mark as Completed</a>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

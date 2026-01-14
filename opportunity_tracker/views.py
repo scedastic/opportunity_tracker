@@ -1,6 +1,6 @@
 import datetime
 from django.db.models import Q, Count
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from .models import Opportunity, Notes, FollowUp, Contact
 
 
@@ -68,3 +68,16 @@ def current_follow_ups(request):
         "follow_ups.html",
         {"page_title": "Opportunities to Follow Up", "follow_ups": follow_ups}
     )
+
+def complete_follow_up(request, follow_up_id):
+    """
+    Mark follow up as completed. Then go to Opportunity detail page
+    
+    :param request: Description
+    :param follow_up_id: Description
+    """
+    follow_up = get_object_or_404(FollowUp, pk=follow_up_id)
+    follow_up.completed = True
+    follow_up.save()
+
+    return redirect(opportunity_view, follow_up.opportunity.id)

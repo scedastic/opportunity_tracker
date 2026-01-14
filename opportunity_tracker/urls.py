@@ -18,7 +18,7 @@ from django.urls import path
 from .views import (
     all_opportunities, open_opportunities, opportunities_missing_contacts_follow_ups, 
     opportunity_view, 
-    current_follow_ups
+    current_follow_ups, complete_follow_up,
     )
 
 urlpatterns = [
@@ -27,5 +27,6 @@ urlpatterns = [
     path("opportunity/<int:opportunity_id>/", opportunity_view, name="opportunity_view"),
     path("all/", all_opportunities, name="all-opportunities"),
     path("opp-no-cf/", opportunities_missing_contacts_follow_ups, name="opportunites-without-contacts-follow-ups"),
-    path("followups/", current_follow_ups, name="current-follow-ups")
+    path("followups/", current_follow_ups, name="current-follow-ups"),
+    path("follow-up/<int:follow_up_id>/completed/", complete_follow_up, name="complete-follow-up"),
 ]
