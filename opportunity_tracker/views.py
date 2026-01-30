@@ -27,6 +27,7 @@ def all_opportunities(request):
 def opportunity_view(request, opportunity_id):
     """Details about a specific opportunity"""
     opportunity = get_object_or_404(Opportunity, pk=opportunity_id)
+    stages = Stage.objects.exclude(name__in=['Placeholder', opportunity.stage.name])    #.exclude(id == opportunity.stage.id)
     notes = Notes.objects.filter(opportunity=opportunity)
     follow_ups = FollowUp.objects.filter(opportunity=opportunity)
     contacts = Contact.objects.filter(opportunity=opportunity)
@@ -35,6 +36,7 @@ def opportunity_view(request, opportunity_id):
         {
             "page_title": "Opportunity Details", 
             "o": opportunity, 
+            "stages": stages,
             "follow_ups": follow_ups,
             "contacts": contacts,
             "notes": notes}
@@ -53,6 +55,15 @@ def opportunities_missing_contacts_follow_ups(request):
         "opportunities.html",
         {"page_title": "Opportunities missing Contacts and Follow Ups", "opportunities": opportunities}
     )
+
+def all_contacts(request):
+    contacts = Contact.objects.all()
+    return render(request, "contacts.html", {"page_title": "All Contacts", "contacts": contacts})
+
+def current_contacts(request):
+    contacts = Contact.objects.filter(
+        Q(opportunity=None) | Q(opportunity__open=True))
+    return render(request, "contacts.html", {"page_title": "Current Contacts", "contacts": contacts})
 
 def current_follow_ups(request):
     """Show all FollowUps for the next 7 days."""
