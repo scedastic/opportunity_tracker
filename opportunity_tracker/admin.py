@@ -27,8 +27,12 @@ class FollowUpAdmin(admin.ModelAdmin):
     list_filter = ('opportunity__open','completed')
 
 
+class StageAdmin(admin.ModelAdmin):
+    list_display = ('name','rank')
+
+
 admin.site.register(Opportunity, OpportunityAdmin)
 admin.site.register(Contact, ContactAdmin)
 admin.site.register(FollowUp, FollowUpAdmin)
 admin.site.register(Notes, NotesAdmin)
-admin.site.register(Stage)
+admin.site.register(Stage, StageAdmin)
