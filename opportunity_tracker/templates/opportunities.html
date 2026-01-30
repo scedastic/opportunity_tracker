@@ -5,6 +5,7 @@
             <thead>
                 <th>Date</th>
                 <th>Company Name</th>
+                <th>Position</th>
                 <th>Stack</th>
                 <th>$Min </th>
                 <th>Stage </th>
@@ -14,6 +15,7 @@
                 <tr>
                     <td>{{ o.initiation_date|default_if_none:"" }}</td>
                     <td><a href="{% url 'opportunity_view' o.id %}">{{ o.company_name }}</a> </td>
+                    <td>{{ o.job_title }}</td>
                     <td>{{ o.stack }}</td>
                     <td>{{ o.posted_minimum }}</td>
                     <td>{{ o.stage }}</td>
