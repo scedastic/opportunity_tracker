@@ -13,7 +13,10 @@
                 <tr>
                     <td>{{ f.follow_up_date }}</td>
                     <td>
-                        <span class="font-weight-bold">{{ f.opportunity.company_name }}</span>
+                        <span class="font-weight-bold">
+                            <a href="{% url 'opportunity_view' f.opportunity.id %}">
+                                {{ f.opportunity.company_name }}
+                            </a></span>
                         {% if f.contact %}
                             <div > {{ f.contact.name }} {{ f.contact.phone }}</div>
                         {% endif %}
