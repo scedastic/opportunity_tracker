@@ -1,7 +1,9 @@
 import datetime
+from urllib import response
 from django.db.models import Q, Count
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import Opportunity, Notes, FollowUp, Contact
+from .models import Opportunity, Notes, FollowUp, Contact, Stage
 
 
 def open_opportunities(request):
@@ -41,6 +43,21 @@ def opportunity_view(request, opportunity_id):
             "contacts": contacts,
             "notes": notes}
     )
+
+def update_opportunity_stage(request, opportunity_id, stage_id):
+    opportunity = get_object_or_404(Opportunity, pk=opportunity_id)
+    old_stage = opportunity.stage
+    new_stage = get_object_or_404(Stage, pk=stage_id)
+    new_note = Notes()
+    new_note.opportunity = opportunity
+    new_note.date = datetime.datetime.today
+    new_note.note = f"Changed stage from {old_stage.name} to {new_stage.name}"
+    opportunity.stage = new_stage
+    opportunity.save()
+    return redirect("opportunity_view", opportunity_id=opportunity.id)
+
+
+
 
 def opportunities_missing_contacts_follow_ups(request):
     opportunities = ( 
