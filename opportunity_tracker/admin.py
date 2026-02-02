@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Opportunity, Contact, FollowUp, Notes, Stage
+from .models import Opportunity, Contact, FollowUp, Notes, Stage, StageHistory
 
 admin.site.site_title = "Opportunity Tracker site administration" 
 admin.site.site_header = "Opportunity Tracker administration"
@@ -31,8 +31,15 @@ class StageAdmin(admin.ModelAdmin):
     list_display = ('name','rank')
 
 
+class StageHistoryAdmin(admin.ModelAdmin):
+    list_display = ('transition_date', 'opportunity', 'new_stage')
+    search_fields = ('opportunity__company_name',)
+    list_filter = ('new_stage', )
+
+
 admin.site.register(Opportunity, OpportunityAdmin)
 admin.site.register(Contact, ContactAdmin)
 admin.site.register(FollowUp, FollowUpAdmin)
 admin.site.register(Notes, NotesAdmin)
 admin.site.register(Stage, StageAdmin)
+admin.site.register(StageHistory, StageHistoryAdmin)

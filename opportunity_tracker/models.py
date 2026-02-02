@@ -1,6 +1,6 @@
 from django.db import models
 from phone_field import PhoneField
-
+import datetime
 
 class Stage(models.Model):
     id = models.AutoField(primary_key=True)
@@ -34,6 +34,17 @@ class Opportunity(models.Model):
     class Meta:
         verbose_name_plural = "Opportunities"
         ordering = ["company_name"]
+
+
+class StageHistory(models.Model):
+    id = models.AutoField(primary_key=True)
+    opportunity = models.ForeignKey(Opportunity, on_delete=models.CASCADE)
+    new_stage = models.ForeignKey(Stage, on_delete=models.PROTECT)
+    transition_date = models.DateField(default=datetime.datetime.today)
+
+    class Meta:
+        verbose_name_plural = "Stage History"
+        ordering=["transition_date"]
 
 
 class Notes(models.Model):
