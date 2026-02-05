@@ -1,7 +1,13 @@
 .my-custom-scrollbar {
     position: relative;
-    height: 600px;
-    overflow: auto;
+    height: 580px;
+    overflow-y: scroll;
+}
+.my-custom-scrollbar thead th {
+    position: sticky;
+    top: 0;
+    background-color: #fff; /* keep scrolled content covered, when under the header */
+    z-index: 10;
 }
 .table-wrapper-scroll-y {
     display: block;
