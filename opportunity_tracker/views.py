@@ -3,6 +3,8 @@ from urllib import response
 from django.db.models import Q, Count
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+
+from .forms import OpportunityForm
 from .models import Opportunity, Notes, FollowUp, Contact, Stage, StageHistory
 
 
@@ -60,7 +62,21 @@ def update_opportunity_stage(request, opportunity_id, stage_id):
     opportunity.save()
     return redirect("opportunity_view", opportunity_id=opportunity.id)
 
-
+def add_opportunity(request):
+    if request.method == "POST":
+        print("POSTING!")
+        form = OpportunityForm(request.POST)
+        if form.is_valid():
+            print("VALID!")
+            form.save()
+            return redirect("open-opportunities")
+        else:   # Debugging only
+            print("not valid")
+    else:
+        print("not posting")
+        context = {}
+        context["form"] = OpportunityForm()
+    return render(request, "opportunity.html", {"form": OpportunityForm})
 
 
 def opportunities_missing_contacts_follow_ups(request):

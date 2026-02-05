@@ -18,6 +18,7 @@ from django.urls import path
 from .views import (
     all_opportunities, open_opportunities, opportunities_missing_contacts_follow_ups, 
     opportunity_view, update_opportunity_stage,
+    add_opportunity,
     all_contacts, current_contacts,
     current_follow_ups, complete_follow_up,
     )
@@ -25,6 +26,7 @@ from .views import (
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", open_opportunities, name="open-opportunities"),
+    path("opportunity/add/", add_opportunity, name="add-opportunity"),
     path("opportunity/<int:opportunity_id>/", opportunity_view, name="opportunity_view"),
     path("opportunity/<int:opportunity_id>/update-stage/<int:stage_id>/", update_opportunity_stage, name="update-opportunity-stage"),
     path("all/", all_opportunities, name="all-opportunities"),
