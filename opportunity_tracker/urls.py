@@ -14,25 +14,37 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from .views import (
     all_opportunities, open_opportunities, opportunities_missing_contacts_follow_ups, 
     opportunity_view, update_opportunity_stage,
     add_opportunity,
     all_contacts, current_contacts,
     current_follow_ups, complete_follow_up,
+    dashboard,
     )
 
-urlpatterns = [
+urlpatterns = [    
+    path("admin/dj-redis-panel/", include("dj_redis_panel.urls")),  # for redis panel
+    # path("admin/dj-celery-panel/", include("dj_celery_panel.urls")),  # for celery panel
+    path("admin/dj-control-room/", include("dj_control_room.urls")),  # for the control room, which is a dashboard for monitoring and managing background tasks.
+    path('admin/dj-urls-panel/', include('dj_urls_panel.urls')),  # Django URLs Panel
     path("admin/", admin.site.urls),
-    path("", open_opportunities, name="open-opportunities"),
+    path("", dashboard, name="dashboard"),
     path("opportunity/add/", add_opportunity, name="add-opportunity"),
     path("opportunity/<int:opportunity_id>/", opportunity_view, name="opportunity_view"),
     path("opportunity/<int:opportunity_id>/update-stage/<int:stage_id>/", update_opportunity_stage, name="update-opportunity-stage"),
     path("all/", all_opportunities, name="all-opportunities"),
+    path("open/", open_opportunities, name="open-opportunities"),
     path("contacts/", all_contacts, name="all-contacts"),
     path("current-contacts/", current_contacts, name="current-contacts"),
     path("opp-no-cf/", opportunities_missing_contacts_follow_ups, name="opportunites-without-contacts-follow-ups"),
     path("followups/", current_follow_ups, name="current-follow-ups"),
     path("follow-up/<int:follow_up_id>/completed/", complete_follow_up, name="complete-follow-up"),
-]
+] 
+
+# IF TESTING is True, then add the debug toolbar urls to urlpatterns.
+from .settings import TESTING
+if TESTING:
+    from debug_toolbar.toolbar import debug_toolbar_urls
+    urlpatterns += debug_toolbar_urls()
