@@ -25,6 +25,9 @@ SECRET_KEY = "django-insecure-mm9(3k0d0xkw96kn&16e7r(sgnc$#41g1)d$o(whcx3)$^%dvl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# TESTING: used to display the debug toolbar.
+TESTING = False
+
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -38,6 +41,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "opportunity_tracker",
     "phone_field",
+    "dj_urls_panel",    
+    "dj_celery_panel",
+    "dj_redis_panel",
+    "dj_control_room",
 ]
 
 MIDDLEWARE = [
@@ -70,6 +77,25 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "opportunity_tracker.wsgi.application"
 
+# Optional: Configure dj_urls_panel
+DJ_URLS_PANEL_SETTINGS = {
+    # Exclude specific URL patterns from the panel
+    'EXCLUDE_URLS': [
+        r'^admin/',      # Exclude admin URLs
+        r'^__debug__/',  # Exclude debug toolbar
+    ],
+    
+    # Use a custom URLconf instead of ROOT_URLCONF
+    'URL_CONFIG': None,  # e.g., 'myproject.api_urls'
+    
+    # Enable/disable URL testing interface (recommended: False in production)
+    'ENABLE_TESTING': True,
+    
+    # Whitelist hosts for URL testing (SSRF protection)
+    # None = default blocklist only (blocks localhost, private IPs)
+    # List = only allow specified hosts
+    'ALLOWED_HOSTS': None,  # e.g., ['example.com', 'api.example.com']
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -100,9 +126,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
+
+
+if TESTING:
+    INSTALLED_APPS.append("debug_toolbar")
+    MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
+
 
 LANGUAGE_CODE = "en-us"
 
