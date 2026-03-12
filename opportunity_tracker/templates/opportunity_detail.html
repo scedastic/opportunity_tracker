@@ -34,12 +34,15 @@
             Change Stage to:
         </div>
         <div class="col-4">
-            <select name="new_stage"> 
+            <ul class="list-group">
+
             {% for s in stages %}
-                <option value="{{s.id}}">{{ s.name }}</option> 
+                <li class="list-group-item">
+                    <a href="{% url 'update-opportunity-stage' o.id s.id %}">{{ s.name }}</a>
+                </li>
+                
             {% endfor %}
-            </select>
-            <a class="btn btn-success mt-1" href="#">Update Stage</a>
+            </ul>
         </div>
     </div>
 </div>
