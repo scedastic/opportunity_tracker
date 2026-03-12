@@ -7,6 +7,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .forms import OpportunityForm
 from .models import Opportunity, Notes, FollowUp, Contact, Stage, StageHistory
 
+def dashboard(request):
+    return render(request, "dashboard.html", {"page_title": "Dashboard"})
 
 def open_opportunities(request):
     """Show open opportunities"""
