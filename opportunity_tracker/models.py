@@ -26,10 +26,10 @@ class Opportunity(models.Model):
     initiation_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return_str = f"{self.company_name} {self.stack}"
+        return_str = f"{self.company_name} {self.job_title}"
         if self.posted_minimum > 0: 
             return_str += f" ${self.posted_minimum}"
-        return return_str
+        return return_str + f" - {self.stage} {self.initiation_date}"
 
     class Meta:
         verbose_name_plural = "Opportunities"
