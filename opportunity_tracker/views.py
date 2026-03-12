@@ -71,6 +71,11 @@ def add_opportunity(request):
         if form.is_valid():
             print("VALID!")
             form.save()
+            new_stage_history = StageHistory()
+            new_stage_history.opportunity = form.instance
+            new_stage_history.new_stage = form.instance.stage
+            new_stage_history.transition_date = datetime.date.today()
+            new_stage_history.save()            
             return redirect("open-opportunities")
         else:   # Debugging only
             print("not valid")
