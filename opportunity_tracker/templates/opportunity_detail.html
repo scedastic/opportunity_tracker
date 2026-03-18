@@ -25,6 +25,13 @@
             <span class="font-italic">Unknown</span>
         {% endif %}
         </div>
+        <div class="col">     
+        {% if o.posted_maximum > 0 %}
+            $ {{ o.posted_maximum }}
+        {% else %}
+            <span class="font-italic">Unknown</span>
+        {% endif %}
+        </div>
         <div class="col-6"></div>
     </div>
     <div class="row">

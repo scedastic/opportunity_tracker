@@ -70,6 +70,8 @@ def add_opportunity(request):
         form = OpportunityForm(request.POST)
         if form.is_valid():
             print("VALID!")
+            # if posted maximum is not filled in, then set it to the posted minimum. 
+            form.posted_maximum = max(form.posted_maximum, form.posted_minimum)
             form.save()
             new_stage_history = StageHistory()
             new_stage_history.opportunity = form.instance

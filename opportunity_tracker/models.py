@@ -19,6 +19,7 @@ class Opportunity(models.Model):
     company_name = models.CharField(max_length=50, db_index=True)
     job_title = models.CharField(max_length=50, default="SOFTWARE")
     posted_minimum = models.IntegerField(default=0)
+    posted_maximum = models.IntegerField(default=0)
     stack = models.CharField(max_length=50, db_index=True)
     requirements = models.CharField(max_length=255, db_index=True)
     open = models.BooleanField(default=True)
