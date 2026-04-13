@@ -21,6 +21,7 @@ from .views import (
     add_opportunity,
     all_contacts, current_contacts,
     current_follow_ups, complete_follow_up,
+    add_notes_to_opportunity,
     dashboard,
     )
 
@@ -34,6 +35,7 @@ urlpatterns = [
     path("opportunity/add/", add_opportunity, name="add-opportunity"),
     path("opportunity/<int:opportunity_id>/", opportunity_view, name="opportunity_view"),
     path("opportunity/<int:opportunity_id>/update-stage/<int:stage_id>/", update_opportunity_stage, name="update-opportunity-stage"),
+    path('opportunity/<int:opportunity_id>/add-note/', add_notes_to_opportunity, name='add-note'),
     path("all/", all_opportunities, name="all-opportunities"),
     path("open/", open_opportunities, name="open-opportunities"),
     path("contacts/", all_contacts, name="all-contacts"),

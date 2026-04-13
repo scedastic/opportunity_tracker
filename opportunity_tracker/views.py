@@ -1,12 +1,15 @@
 import datetime
-from urllib import response
+from urllib import request, response
 from django.db.models import Q, Count
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import OpportunityForm
+from .forms import NoteForm, OpportunityForm
 from .models import Opportunity, Notes, FollowUp, Contact, Stage, StageHistory
 
+##################
+# Frontend views #
+##################
 def dashboard(request):
     return render(request, "dashboard.html", {"page_title": "Dashboard"})
 
@@ -71,7 +74,7 @@ def add_opportunity(request):
         if form.is_valid():
             print("VALID!")
             # if posted maximum is not filled in, then set it to the posted minimum. 
-            form.posted_maximum = max(form.posted_maximum, form.posted_minimum)
+            # form.posted_maximum = max(form.posted_maximum, form.posted_minimum)
             form.save()
             new_stage_history = StageHistory()
             new_stage_history.opportunity = form.instance
@@ -86,6 +89,24 @@ def add_opportunity(request):
         context = {}
         context["form"] = OpportunityForm()
     return render(request, "opportunity.html", {"form": OpportunityForm})
+
+def add_notes_to_opportunity(request, opportunity_id):
+    opportunity = get_object_or_404(Opportunity, pk=opportunity_id)
+    if request.method == "POST":
+        form = NoteForm(request.POST)
+        if form.is_valid():
+            note = form.save(commit=False)
+            note.opportunity = opportunity
+            note.save()
+            return redirect("opportunity_view", opportunity_id=opportunity_id)
+    else:
+        context = {}
+        context["page_title"] = "Add Note to Opportunity - " + opportunity.job_title
+        form = NoteForm()
+        form.fields["opportunity"].initial = opportunity
+        context["form"] = form
+    return render(request, "add_note.html", context)
+    pass
 
 
 def opportunities_missing_contacts_follow_ups(request):
