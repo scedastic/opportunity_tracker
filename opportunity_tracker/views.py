@@ -16,8 +16,10 @@ def dashboard(request):
 def open_opportunities(request):
     """Show open opportunities"""
 
-    opportunities = Opportunity.objects.filter(open=True)
-
+    opportunities = Opportunity.objects.filter(open=True, stage__name__in=[
+        "Sent Resume",
+        "HR Interview",
+        "Technical Interview",])
     return render(
         request,
         "opportunities.html",
