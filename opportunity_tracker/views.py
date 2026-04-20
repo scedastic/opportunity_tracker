@@ -124,6 +124,13 @@ def opportunities_missing_contacts_follow_ups(request):
         {"page_title": "Opportunities missing Contacts and Follow Ups", "opportunities": opportunities}
     )
 
+def recruiters(request):
+    recruiter_stage = Stage.objects.filter(name="Recruiting").first()
+    recruiters = Opportunity.objects.filter(stage=recruiter_stage).distinct()
+    contacts = Contact.objects.filter(opportunity__in=recruiters)
+    context = {"page_title": "Recruiters", "recruiters": recruiters, "contacts": contacts}
+    return render(request, "recruiters.html", context)
+
 def all_contacts(request):
     contacts = Contact.objects.all()
     return render(request, "contacts.html", {"page_title": "All Contacts", "contacts": contacts})
