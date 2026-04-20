@@ -6,9 +6,9 @@ admin.site.site_header = "Opportunity Tracker administration"
 admin.site.index_title = "Opportunity Tracker administration"
 
 class OpportunityAdmin(admin.ModelAdmin):
-    list_display = ('company_name', 'job_title', 'stack', 'open')
+    list_display = ('company_name', 'job_title', 'stack', 'initiation_date')
     search_fields = ('company_name', 'job_title', 'stack', 'stage__name')
-    list_filter = ('stage', 'open')
+    list_filter = ('stage', )
 
 
 class ContactAdmin(admin.ModelAdmin):
@@ -24,7 +24,7 @@ class NotesAdmin(admin.ModelAdmin):
 
 class FollowUpAdmin(admin.ModelAdmin):
     list_display = ('opportunity','follow_up_date','completed')
-    list_filter = ('opportunity__open','completed')
+    list_filter = ('completed',)
 
 
 class StageAdmin(admin.ModelAdmin):

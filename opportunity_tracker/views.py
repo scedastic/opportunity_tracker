@@ -16,7 +16,7 @@ def dashboard(request):
 def open_opportunities(request):
     """Show open opportunities"""
 
-    opportunities = Opportunity.objects.filter(open=True, stage__name__in=[
+    opportunities = Opportunity.objects.filter(stage__name__in=[
         "Sent Resume",
         "HR Interview",
         "Technical Interview",])
@@ -110,13 +110,12 @@ def add_notes_to_opportunity(request, opportunity_id):
     return render(request, "add_note.html", context)
     pass
 
-
 def opportunities_missing_contacts_follow_ups(request):
     opportunities = ( 
         Opportunity.objects.annotate(
             contact_count=Count("contact"), 
             note_count=Count("notes")
-        ).filter(contact_count=0, note_count=0, open=True)
+        ).filter(contact_count=0, note_count=0)
         .order_by("-initiation_date") 
     )
     return render(
@@ -129,19 +128,18 @@ def all_contacts(request):
     contacts = Contact.objects.all()
     return render(request, "contacts.html", {"page_title": "All Contacts", "contacts": contacts})
 
+# View may not be relevant.
 def current_contacts(request):
     contacts = Contact.objects.filter(
-        Q(opportunity=None) | Q(opportunity__open=True))
+        Q(opportunity=None) )
     return render(request, "contacts.html", {"page_title": "Current Contacts", "contacts": contacts})
 
 def current_follow_ups(request):
     """Show all FollowUps for the next 7 days."""
     # follow_ups = FollowUp.objects.filter(follow_up_date__gte=datetime.date.today())
     follow_ups = FollowUp.objects.filter(
-        Q(opportunity__open=True) & (
-            Q(follow_up_date__gte=datetime.date.today()) |
-            Q(completed=False)
-        )
+        Q(follow_up_date__gte=datetime.date.today()) |
+        Q(completed=False)        
     ).order_by("follow_up_date")
     return render(
         request,

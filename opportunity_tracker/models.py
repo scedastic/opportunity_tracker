@@ -22,7 +22,6 @@ class Opportunity(models.Model):
     posted_maximum = models.IntegerField(default=0)
     stack = models.CharField(max_length=50, db_index=True)
     requirements = models.CharField(max_length=255, db_index=True)
-    open = models.BooleanField(default=True)
     stage = models.ForeignKey(Stage, on_delete=models.PROTECT)
     initiation_date = models.DateField(blank=True, null=True)
 

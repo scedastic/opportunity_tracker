@@ -14,7 +14,11 @@
                     <td>{{ c.name }}</td>
                     <td>{{ c.phone }}</td>
                     <td>{{ c.email }}</td>
-                    <td><a href="{% url 'opportunity_view' c.opportunity.id %}">{{ c.opportunity }}</a></td>
+                    <td>
+                        {% if c.opportunity %}
+                            {{ c.opportunity.company_name }}
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
