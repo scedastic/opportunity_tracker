@@ -4,7 +4,7 @@ from django.db.models import Q, Count
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import NoteForm, OpportunityForm
+from .forms import FollowUpForm, NoteForm, OpportunityForm
 from .models import Opportunity, Notes, FollowUp, Contact, Stage, StageHistory
 
 ##################
@@ -148,6 +148,24 @@ def current_follow_ups(request):
         "follow_ups.html",
         {"page_title": "Opportunities to Follow Up", "follow_ups": follow_ups}
     )
+
+def add_follow_up(request, opportunity_id):
+    opportunity = get_object_or_404(Opportunity, pk=opportunity_id)
+    if request.method == "POST":
+        form = FollowUpForm(request.POST)
+        if form.is_valid():
+            follow_up = form.save(commit=False)
+            follow_up.opportunity = opportunity
+            follow_up.completed = False
+            follow_up.save()
+            return redirect("opportunity_view", opportunity_id=opportunity_id)
+    else:
+        context = {}
+        context["page_title"] = f"Add Follow Up for {opportunity.company_name}"
+        form = FollowUpForm()
+        form.fields["opportunity"].initial = opportunity
+        context["form"] = form        
+    return render(request, "add_follow_up.html", context)
 
 def complete_follow_up(request, follow_up_id):
     """
