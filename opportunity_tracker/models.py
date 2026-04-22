@@ -85,6 +85,8 @@ class FollowUp(models.Model):
     completed = models.BooleanField(default=False)
 
     def __str__(self):
+        if self.opportunity is None:
+            return f"{self.follow_up_date}"
         return f"{self.follow_up_date} - {self.opportunity}"
 
     class Meta:
