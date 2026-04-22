@@ -69,7 +69,10 @@ class Contact(models.Model):
     opportunity = models.ForeignKey(Opportunity, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.name} {self.phone } @ {self.opportunity.company_name}"
+        if self.opportunity is None:
+            return f"{self.name} {self.phone}"
+        else:
+            return f"{self.name} {self.phone} @ {self.opportunity.company_name}"
 
     class Meta:
         ordering = ["name"]
