@@ -1,9 +1,13 @@
 from django.contrib import admin
-from .models import Opportunity, Contact, FollowUp, Notes, Stage, StageHistory
+from .models import Company, Opportunity, Contact, FollowUp, Notes, Stage, StageHistory
 
 admin.site.site_title = "Opportunity Tracker site administration" 
 admin.site.site_header = "Opportunity Tracker administration"
 admin.site.index_title = "Opportunity Tracker administration"
+
+class CompanyAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
 
 class OpportunityAdmin(admin.ModelAdmin):
     list_display = ('company_name', 'job_title', 'stack', 'initiation_date')
@@ -36,7 +40,7 @@ class StageHistoryAdmin(admin.ModelAdmin):
     search_fields = ('opportunity__company_name',)
     list_filter = ('new_stage', )
 
-
+admin.site.register(Company, CompanyAdmin)
 admin.site.register(Opportunity, OpportunityAdmin)
 admin.site.register(Contact, ContactAdmin)
 admin.site.register(FollowUp, FollowUpAdmin)
