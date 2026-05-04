@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from .views import (
+    company_view,
     all_opportunities, open_opportunities, opportunities_missing_contacts_follow_ups, 
     opportunity_view, recruiters, update_opportunity_stage,
     add_opportunity,
@@ -32,6 +33,7 @@ urlpatterns = [
     path('admin/dj-urls-panel/', include('dj_urls_panel.urls')),  # Django URLs Panel
     path("admin/", admin.site.urls),
     path("", dashboard, name="dashboard"),
+    path("company/<int:company_id>/", company_view, name="company-view"),
     path("opportunity/add/", add_opportunity, name="add-opportunity"),
     path('opportunity/<int:opportunity_id>/add-note/', add_notes_to_opportunity, name='add-note'),
     path("opportunity/<int:opportunity_id>/add-follow-up/", add_follow_up, name="add-follow-up"),

@@ -13,15 +13,21 @@
                 <tr>
                     <td>{{ f.follow_up_date }}</td>
                     <td>
-                        <span class="font-weight-bold">
-                            <a href="{% url 'opportunity_view' f.opportunity.id %}">
-                                {{ f.opportunity.company_name }}
-                            </a></span>
+                        {% if f.company %}
+                            <span class="font-weight-bold">
+                                <a href="{% url 'company-view' f.company.id %}">
+                                    {{ f.company.name }}
+                                </a></span>
+                        {% endif %}
                         {% if f.contact %}
                             <div > {{ f.contact.name }} {{ f.contact.phone }}</div>
                         {% endif %}
                     </td>
-                    <td>{{ f.opportunity.job_title }}</td>
+                    <td>
+                        {% if f.opportunity %}
+                            <a href="{% url 'opportunity_view' f.opportunity.id %}">{{ f.opportunity.job_title }}</a>
+                        {% endif %}
+                    </td>
                     <td>
                         {% if f.completed %}
                             {% include 'svg/check_mark' %}

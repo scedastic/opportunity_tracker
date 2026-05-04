@@ -13,13 +13,23 @@ from .models import Opportunity, Notes, FollowUp, Contact, Stage, StageHistory
 def dashboard(request):
     return render(request, "dashboard.html", {"page_title": "Dashboard"})
 
+def company_view(request, company_id):
+    """Show all opportunities for a given company."""
+    opportunities = Opportunity.objects.filter(company_id=company_id).order_by("stage")
+    company_name = opportunities.first().company_name if opportunities.exists() else "Unknown Company"
+    return render(
+        request,
+        "opportunities.html",
+        {"page_title": f"Opportunities at {company_name}", "opportunities": opportunities},
+    )
+
 def open_opportunities(request):
     """Show open opportunities"""
 
     opportunities = Opportunity.objects.filter(stage__name__in=[
         "Sent Resume",
         "HR Interview",
-        "Technical Interview",])
+        "Technical Interview",]).order_by("company")
     return render(
         request,
         "opportunities.html",
@@ -28,7 +38,7 @@ def open_opportunities(request):
     
 def all_opportunities(request):
     """Show all open opportunities, open and expired."""
-    opportunities = Opportunity.objects.all().order_by("stage").order_by("company_name")
+    opportunities = Opportunity.objects.all().order_by("stage").order_by("company")
     return render(
         request,
         "opportunities.html",
