@@ -28,8 +28,8 @@ class Company(models.Model):
 
 class Opportunity(models.Model):
     id = models.AutoField(primary_key=True)
-    company_name = models.CharField(max_length=50, db_index=True)
-    company = models.ForeignKey(Company, on_delete=models.PROTECT)
+    company_name = models.CharField(max_length=50, db_index=True, null=True, blank=True)
+    company = models.ForeignKey(Company, on_delete=models.PROTECT, default=202)
     job_title = models.CharField(max_length=50, default="SOFTWARE")
     posted_minimum = models.IntegerField(default=0)
     posted_maximum = models.IntegerField(default=0)
@@ -80,6 +80,7 @@ class Contact(models.Model):
     phone = PhoneField(blank=True, help_text="Contact phone number")
     email = models.EmailField(max_length=255, blank=True)
     opportunity = models.ForeignKey(Opportunity, on_delete=models.SET_NULL, null=True, blank=True)
+    company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         if self.opportunity is None:
@@ -94,6 +95,7 @@ class FollowUp(models.Model):
     id = models.AutoField(primary_key=True)
     opportunity = models.ForeignKey(Opportunity, on_delete=models.SET_NULL, null=True, blank=True)
     contact = models.ForeignKey(Contact, on_delete=models.SET_NULL, null=True, blank=True)
+    company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, blank=True)
     follow_up_date = models.DateField(blank=True, null=True)
     completed = models.BooleanField(default=False)
 

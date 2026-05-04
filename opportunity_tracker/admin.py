@@ -10,14 +10,14 @@ class CompanyAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 class OpportunityAdmin(admin.ModelAdmin):
-    list_display = ('company_name', 'job_title', 'stack', 'initiation_date')
-    search_fields = ('company_name', 'job_title', 'stack', 'stage__name')
+    list_display = ('company__name', 'job_title', 'stack', 'initiation_date')
+    search_fields = ('company__name', 'job_title', 'stack', 'stage__name')
     list_filter = ('stage', )
 
 
 class ContactAdmin(admin.ModelAdmin):
     list_display = ('name','opportunity')
-    search_fields = ('opportunity__company_name',)
+    search_fields = ('opportunity__company__name',)
 
 
 class NotesAdmin(admin.ModelAdmin):
