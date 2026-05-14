@@ -27,7 +27,10 @@
                         {{ o.job_title }}</a>
                     </td>
                     <td>{{ o.stack }}</td>
-                    <td>{{ o.posted_minimum }}</td>
+                    <td>
+                        {{ o.posted_minimum }}
+                        {% if o.posted_maximum %} - {{ o.posted_maximum }} {% endif %}
+                    </td>
                     <td>{{ o.stage }}</td>
                 </tr>
                 {% endfor %}
