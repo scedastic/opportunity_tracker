@@ -1,5 +1,13 @@
 from django import forms
-from .models import Opportunity, Contact, FollowUp, Notes
+from .models import Company, Opportunity, Contact, FollowUp, Notes
+
+
+
+class CompanyForm(forms.ModelForm):
+    
+    class Meta:
+        model = Company
+        fields = "__all__"
 
 
 class FollowUpForm(forms.ModelForm):
