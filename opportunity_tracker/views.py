@@ -4,7 +4,7 @@ from django.db.models import Q, Count
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import FollowUpForm, NoteForm, OpportunityForm
+from .forms import CompanyForm, FollowUpForm, NoteForm, OpportunityForm
 from .models import Opportunity, Notes, FollowUp, Contact, Stage, StageHistory
 
 ##################
@@ -12,6 +12,17 @@ from .models import Opportunity, Notes, FollowUp, Contact, Stage, StageHistory
 ##################
 def dashboard(request):
     return render(request, "dashboard.html", {"page_title": "Dashboard"})
+
+def add_company(request):
+    if request.method == "POST":
+        form = CompanyForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("dashboard")
+    else:
+        context = {}
+        context["form"] = CompanyForm()
+    return render(request, "add_company.html", {"form": CompanyForm})
 
 def company_view(request, company_id):
     """Show all opportunities for a given company."""
