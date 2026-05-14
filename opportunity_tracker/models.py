@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.functions import Upper
 from phone_field import PhoneField
 import datetime
 
@@ -23,7 +24,7 @@ class Company(models.Model):
     
     class Meta:
         verbose_name_plural = "Companies"
-        ordering = ["name"]
+        ordering = [Upper("name")]
 
 
 class Opportunity(models.Model):
@@ -39,14 +40,14 @@ class Opportunity(models.Model):
     initiation_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return_str = f"{self.company_name} {self.job_title}"
+        return_str = f"{self.company} {self.job_title}"
         if self.posted_minimum > 0: 
             return_str += f" ${self.posted_minimum}"
         return return_str + f" - {self.stage} {self.initiation_date}"
 
     class Meta:
         verbose_name_plural = "Opportunities"
-        ordering = ["company_name"]
+        ordering = [Upper("company_name")]
 
 
 class StageHistory(models.Model):
@@ -89,7 +90,7 @@ class Contact(models.Model):
             return f"{self.name} {self.phone} @ {self.opportunity.company_name}"
 
     class Meta:
-        ordering = ["name"]
+        ordering = [Upper("name")]
 
 class FollowUp(models.Model):
     id = models.AutoField(primary_key=True)
