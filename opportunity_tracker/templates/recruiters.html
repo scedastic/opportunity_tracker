@@ -20,7 +20,7 @@
                     <td>{{ c.name }}</td>
                     <td>{{ c.phone }}</td>
                     <td>{{ c.email }}</td>
-                    <td><a href="{% url 'opportunity_view' c.opportunity.id %}">{{ c.opportunity.company_name }}</a> </td>
+                    <td><a href="{% url 'company-view' c.company.id %}">{{ c.company.name }}</a> </td>
                 </tr>
                 {% endfor %}
             </tbody>

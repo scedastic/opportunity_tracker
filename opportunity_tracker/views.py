@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import CompanyForm, FollowUpForm, NoteForm, OpportunityForm
-from .models import Opportunity, Notes, FollowUp, Contact, Stage, StageHistory
+from .models import Company, Opportunity, Notes, FollowUp, Contact, Stage, StageHistory
 
 ##################
 # Frontend views #
@@ -146,9 +146,8 @@ def opportunities_missing_contacts_follow_ups(request):
     )
 
 def recruiters(request):
-    recruiter_stage = Stage.objects.filter(name="Recruiting").first()
-    recruiters = Opportunity.objects.filter(stage=recruiter_stage).distinct()
-    contacts = Contact.objects.filter(opportunity__in=recruiters)
+    recruiters = Company.objects.filter(is_recruiter=True)
+    contacts = Contact.objects.filter(company__in=recruiters).order_by("company")
     context = {"page_title": "Recruiters", "recruiters": recruiters, "contacts": contacts}
     return render(request, "recruiters.html", context)
 
