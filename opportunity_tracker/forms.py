@@ -39,6 +39,6 @@ class NoteForm(forms.ModelForm):
         model = Notes
         fields = "__all__"
         widgets = {
-            'note': forms.widgets.Textarea(attrs={'rows': 8, 'cols': 120}),
+            'note': forms.widgets.Textarea(attrs={'rows': 12, 'cols': 120}),
             'date': forms.widgets.DateInput(attrs={'type': 'date'})
         }
