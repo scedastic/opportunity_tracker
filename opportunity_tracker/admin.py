@@ -16,8 +16,8 @@ class OpportunityAdmin(admin.ModelAdmin):
 
 
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ('name','opportunity')
-    search_fields = ('opportunity__company__name',)
+    list_display = ('name','company','opportunity')
+    search_fields = ('company__name',)
 
 
 class NotesAdmin(admin.ModelAdmin):
