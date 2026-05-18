@@ -5,7 +5,7 @@ import datetime
 
 class Stage(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=25)
+    name = models.CharField(max_length=50)
     rank = models.IntegerField()
 
     def __str__(self):
