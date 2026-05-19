@@ -18,6 +18,11 @@
                                 <a href="{% url 'company-view' f.company.id %}">
                                     {{ f.company.name }}
                                 </a></span>
+                        {% elif f.contact.company %}
+                            <span class="font-weight-bold">
+                                <a href="{% url 'company-view' f.contact.company.id %}">
+                                    {{ f.contact.company.name }}
+                                </a></span>
                         {% endif %}
                         {% if f.contact %}
                             <div > {{ f.contact.name }} {{ f.contact.phone }}</div>
