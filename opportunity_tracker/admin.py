@@ -27,7 +27,7 @@ class NotesAdmin(admin.ModelAdmin):
 
 
 class FollowUpAdmin(admin.ModelAdmin):
-    list_display = ('company','opportunity','follow_up_date','completed')
+    list_display = ('contact', 'follow_up_date','completed')
     list_filter = ('completed',)
 
 
