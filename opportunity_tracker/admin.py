@@ -9,10 +9,16 @@ class CompanyAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
 
+
+@admin.action(description="Mark selected opportunities as abandoned")
+def mark_as_abandoned(modeladmin, request, queryset):
+    queryset.update(stage=Stage.objects.get(name="Abandoned"))
+
 class OpportunityAdmin(admin.ModelAdmin):
     list_display = ('company__name', 'job_title', 'stack', 'initiation_date')
     search_fields = ('company__name', 'job_title', 'stack', 'stage__name')
     list_filter = ('stage', )
+    actions=[mark_as_abandoned]
 
 
 class ContactAdmin(admin.ModelAdmin):
