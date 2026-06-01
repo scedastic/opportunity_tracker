@@ -34,6 +34,24 @@ def company_view(request, company_id):
         {"page_title": f"Opportunities at {company_name}", "opportunities": opportunities},
     )
 
+def all_companies(request):
+    """Show all companies."""
+    companies = Company.objects.annotate(
+        in_play=Count(
+            "opportunity",
+            filter=Q(
+                opportunity__stage__name="Sent Resume"
+            ) | Q(
+                opportunity__stage__name__icontains="interview"
+            ),
+        )
+    ).order_by("name")
+    return render(
+        request,
+        "companies.html",
+        {"page_title": "All Companies", "companies": companies},
+    )
+
 def open_opportunities(request):
     """Show open opportunities"""
 
