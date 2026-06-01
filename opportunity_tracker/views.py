@@ -106,6 +106,8 @@ def update_opportunity_stage(request, opportunity_id, stage_id):
     stage_transition.save()
     opportunity.stage = new_stage
     opportunity.save()
+    if opportunity.stage == "Abandoned":
+        return redirect("open-opportunities")
     return redirect("opportunity_view", opportunity_id=opportunity.id)
 
 def add_opportunity(request):
