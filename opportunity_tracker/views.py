@@ -66,7 +66,7 @@ def open_opportunities(request):
     )
     
 def all_opportunities(request):
-    """Show all open opportunities, open and expired."""
+    """Show all open opportunities, regardless of stage."""
     opportunities = Opportunity.objects.all().order_by("stage").order_by("company")
     return render(
         request,
