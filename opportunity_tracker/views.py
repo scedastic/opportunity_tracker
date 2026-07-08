@@ -81,7 +81,7 @@ def opportunity_view(request, opportunity_id):
     stage_transitions = StageHistory.objects.filter(opportunity=opportunity)
     notes = Notes.objects.filter(opportunity=opportunity)
     follow_ups = FollowUp.objects.filter(opportunity=opportunity)
-    contacts = Contact.objects.filter(opportunity=opportunity)
+    contacts = Contact.objects.filter(opportunities=opportunity)
     return render(
         request, "opportunity_detail.html", 
         {
@@ -154,7 +154,7 @@ def add_notes_to_opportunity(request, opportunity_id):
 def opportunities_missing_contacts_follow_ups(request):
     opportunities = ( 
         Opportunity.objects.annotate(
-            contact_count=Count("contact"), 
+            contact_count=Count("contacts"), 
             note_count=Count("notes")
         ).filter(contact_count=0, note_count=0)
         .order_by("-initiation_date") 
@@ -177,8 +177,7 @@ def all_contacts(request):
 
 # View may not be relevant.
 def current_contacts(request):
-    contacts = Contact.objects.filter(
-        Q(opportunity=None) )
+    contacts = Contact.objects.filter(opportunities__isnull=True).distinct()
     return render(request, "contacts.html", {"page_title": "Current Contacts", "contacts": contacts})
 
 def current_follow_ups(request):
