@@ -21,7 +21,10 @@ class FollowUpForm(forms.ModelForm):
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            self.fields['contact'].queryset = Contact.objects.filter(opportunity=self.instance.opportunity)
+            if getattr(self.instance, 'opportunity', None) is not None:
+                self.fields['contact'].queryset = Contact.objects.filter(opportunities=self.instance.opportunity)
+            else:
+                self.fields['contact'].queryset = Contact.objects.none()
             
 
 class OpportunityForm(forms.ModelForm): 
