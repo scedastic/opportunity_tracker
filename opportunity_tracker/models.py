@@ -80,14 +80,17 @@ class Contact(models.Model):
     name = models.CharField(max_length=50)
     phone = PhoneField(blank=True, help_text="Contact phone number")
     email = models.EmailField(max_length=255, blank=True)
-    opportunity = models.ForeignKey(Opportunity, on_delete=models.SET_NULL, null=True, blank=True)
+    opportunities = models.ManyToManyField(Opportunity, blank=True, related_name="contacts")
     company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, blank=True)
 
+    @property
+    def opportunity(self):
+        return self.opportunities.first()
+
     def __str__(self):
-        if self.opportunity is None:
-            return f"{self.name} {self.phone}"
-        else:
-            return f"{self.name} {self.phone} @ {self.opportunity.company_name}"
+        if self.opportunities.exists():
+            return f"{self.name} {self.phone} @ {', '.join(str(opportunity) for opportunity in self.opportunities.all())}"
+        return f"{self.name} {self.phone}"
 
     class Meta:
         ordering = [Upper("name")]
