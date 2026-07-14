@@ -65,6 +65,16 @@ def open_opportunities(request):
         {"page_title": "Open Opportunities", "opportunities": opportunities},
     )
     
+def abandoned_opportunities(request):
+    """Show abandoned opportunities"""
+    abandoned_stage = Stage.objects.get(name="Abandoned")
+    opportunities = Opportunity.objects.filter(stage=abandoned_stage).order_by("company")
+    return render(
+        request,
+        "opportunities.html",
+        {"page_title": "Abandoned Opportunities", "opportunities": opportunities},
+    )
+    
 def all_opportunities(request):
     """Show all open opportunities, regardless of stage."""
     opportunities = Opportunity.objects.all().order_by("stage").order_by("company")
