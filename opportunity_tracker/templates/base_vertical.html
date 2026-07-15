@@ -40,7 +40,12 @@
         {% include 'nav.html' %}
     </div>
     <div class="main-content">
-        <h1>{{ page_title }}</h1>
+        <h1>
+            {{ page_title }}
+            {% if records_count is not None %}
+                <span class="badge bg-primary  ms-2 position-relative"  style="top: -2px;">{{ records_count }}</span>
+            {% endif %}
+        </h1>
         {% block content %} {% endblock %}
     </div>
 

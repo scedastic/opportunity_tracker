@@ -20,22 +20,27 @@ from .views import (
     all_opportunities, open_opportunities, opportunities_missing_contacts_follow_ups, 
     opportunity_view, recruiters, update_opportunity_stage,
     add_opportunity, abandoned_opportunities,
-    all_contacts, current_contacts,
+    all_contacts, contact_view,
     current_follow_ups,add_follow_up, complete_follow_up,
     add_notes_to_opportunity,
     dashboard,
     )
 
 urlpatterns = [    
+    # Admin URLs
     path("admin/dj-redis-panel/", include("dj_redis_panel.urls")),  # for redis panel
     # path("admin/dj-celery-panel/", include("dj_celery_panel.urls")),  # for celery panel
     path("admin/dj-control-room/", include("dj_control_room.urls")),  # for the control room, which is a dashboard for monitoring and managing background tasks.
     path('admin/dj-urls-panel/', include('dj_urls_panel.urls')),  # Django URLs Panel
     path("admin/", admin.site.urls),
     path("", dashboard, name="dashboard"),
+
+    # Company URLs
     path("company/add/", add_company, name="add-company"),
     path("companies/", all_companies, name="all-companies"),
     path("company/<int:company_id>/", company_view, name="company-view"),
+
+    # Opportunity URLs
     path("opportunity/add/", add_opportunity, name="add-opportunity"),
     path('opportunity/<int:opportunity_id>/add-note/', add_notes_to_opportunity, name='add-note'),
     path("opportunity/<int:opportunity_id>/add-follow-up/", add_follow_up, name="add-follow-up"),
@@ -44,9 +49,11 @@ urlpatterns = [
     path("all/", all_opportunities, name="all-opportunities"),
     path("open/", open_opportunities, name="open-opportunities"),
     path("abandoned/", abandoned_opportunities, name="abandoned-opportunities"),
+
+    # Contact URLs
     path("recruiters/", recruiters, name="recruiters"),
+    path("contact/<int:contact_id>/", contact_view, name="contact-view"),
     path("contacts/", all_contacts, name="all-contacts"),
-    path("current-contacts/", current_contacts, name="current-contacts"),
     path("opp-no-cf/", opportunities_missing_contacts_follow_ups, name="opportunites-without-contacts-follow-ups"),
     path("followups/", current_follow_ups, name="current-follow-ups"),
     path("follow-up/<int:follow_up_id>/completed/", complete_follow_up, name="complete-follow-up"),

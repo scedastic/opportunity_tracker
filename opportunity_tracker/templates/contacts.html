@@ -6,19 +6,13 @@
                 <th>Name</th>
                 <th>Phone</th>
                 <th>Email</th>
-                <th>Opportunity</th>
             </thead>
             <tbody>
                 {% for c in contacts %}
                 <tr>
-                    <td>{{ c.name }}</td>
+                    <td><a href="{% url 'contact-view' c.id %}">{{ c.name }}</a></td>
                     <td>{{ c.phone }}</td>
                     <td>{{ c.email }}</td>
-                    <td>
-                        {% if c.opportunity %}
-                            {{ c.opportunity.company_name }}
-                        {% endif %}
-                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

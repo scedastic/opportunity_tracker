@@ -62,7 +62,11 @@ def open_opportunities(request):
     return render(
         request,
         "opportunities.html",
-        {"page_title": "Open Opportunities", "opportunities": opportunities},
+        {
+            "page_title": "Open Opportunities", 
+            "opportunities": opportunities,
+            "records_count": opportunities.count(),
+        }
     )
     
 def abandoned_opportunities(request):
@@ -72,7 +76,11 @@ def abandoned_opportunities(request):
     return render(
         request,
         "opportunities.html",
-        {"page_title": "Abandoned Opportunities", "opportunities": opportunities},
+        {
+            "page_title": "Abandoned Opportunities", 
+            "opportunities": opportunities,
+            "records_count": opportunities.count(),
+        }
     )
     
 def all_opportunities(request):
@@ -81,7 +89,11 @@ def all_opportunities(request):
     return render(
         request,
         "opportunities.html",
-        {"page_title": "All Opportunities", "opportunities": opportunities}
+        {
+            "page_title": "All Opportunities", 
+            "opportunities": opportunities,
+            "records_count": opportunities.count(),
+        }
     )
 
 def opportunity_view(request, opportunity_id):
@@ -172,23 +184,45 @@ def opportunities_missing_contacts_follow_ups(request):
     return render(
         request, 
         "opportunities.html",
-        {"page_title": "Opportunities missing Contacts and Follow Ups", "opportunities": opportunities}
+        {
+            "page_title": "Opportunities missing Contacts and Follow Ups", 
+            "opportunities": opportunities,
+            "records_count": opportunities.count(),
+        }
     )
 
 def recruiters(request):
     recruiters = Company.objects.filter(is_recruiter=True)
     contacts = Contact.objects.filter(company__in=recruiters).order_by("company")
-    context = {"page_title": "Recruiters", "recruiters": recruiters, "contacts": contacts}
+    context ={
+        "page_title": "Recruiters", 
+        "recruiters": recruiters, 
+        "contacts": contacts
+    }
     return render(request, "recruiters.html", context)
 
 def all_contacts(request):
     contacts = Contact.objects.all()
-    return render(request, "contacts.html", {"page_title": "All Contacts", "contacts": contacts})
+    return render(request, "contacts.html", 
+                  {
+                      "page_title": "All Contacts", 
+                      "contacts": contacts,
+                      "records_count": contacts.count(),
+                  })
 
-# View may not be relevant.
-def current_contacts(request):
-    contacts = Contact.objects.filter(opportunities__isnull=True).distinct()
-    return render(request, "contacts.html", {"page_title": "Current Contacts", "contacts": contacts})
+def contact_view(request, contact_id):
+    contact = get_object_or_404(Contact, pk=contact_id)
+    opportunities = Opportunity.objects.filter(contacts=contact)
+    return render(
+        request, 
+        "contact_detail.html",
+        {
+            "page_title": f"Contact Details - {contact.name}", 
+            "contact": contact,
+            "opportunities": opportunities,
+            "opportunities_count": opportunities.count(),
+        }
+    )
 
 def current_follow_ups(request):
     """Show all FollowUps for the next 7 days."""
@@ -200,7 +234,10 @@ def current_follow_ups(request):
     return render(
         request,
         "follow_ups.html",
-        {"page_title": "Opportunities to Follow Up", "follow_ups": follow_ups}
+        {
+            "page_title": "Opportunities to Follow Up", 
+            "follow_ups": follow_ups,
+            "records_count": follow_ups.count(),}
     )
 
 def add_follow_up(request, opportunity_id):
