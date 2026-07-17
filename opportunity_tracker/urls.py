@@ -20,7 +20,7 @@ from .views import (
     all_opportunities, open_opportunities, opportunities_missing_contacts_follow_ups, 
     opportunity_view, recruiters, update_opportunity_stage,
     add_opportunity, abandoned_opportunities,
-    all_contacts, contact_view,
+    all_contacts, contact_view, add_follow_up_to_contact,
     current_follow_ups,add_follow_up, complete_follow_up,
     add_notes_to_opportunity,
     dashboard,
@@ -52,6 +52,7 @@ urlpatterns = [
 
     # Contact URLs
     path("recruiters/", recruiters, name="recruiters"),
+    path("contact/<int:contact_id>/add-follow-up/", add_follow_up_to_contact, name="add-follow-up-to-contact"),
     path("contact/<int:contact_id>/", contact_view, name="contact-view"),
     path("contacts/", all_contacts, name="all-contacts"),
     path("opp-no-cf/", opportunities_missing_contacts_follow_ups, name="opportunites-without-contacts-follow-ups"),

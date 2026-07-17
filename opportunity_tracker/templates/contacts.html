@@ -6,6 +6,7 @@
                 <th>Name</th>
                 <th>Phone</th>
                 <th>Email</th>
+                <th>Follow Up</th>
             </thead>
             <tbody>
                 {% for c in contacts %}
@@ -13,6 +14,13 @@
                     <td><a href="{% url 'contact-view' c.id %}">{{ c.name }}</a></td>
                     <td>{{ c.phone }}</td>
                     <td>{{ c.email }}</td>
+                    <td>
+                        <form method="post" action="{% url 'add-follow-up-to-contact' c.id %}" class="d-flex align-items-center">
+                            {% csrf_token %}
+                            <input type="date" name="follow_up_date" class="form-control form-control-sm mr-2" value="{{ today|date:'Y-m-d' }}">
+                            <button type="submit" class="btn btn-sm btn-outline-primary">Follow Up</button>
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

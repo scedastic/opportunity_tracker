@@ -19,12 +19,14 @@ class FollowUpForm(forms.ModelForm):
             'follow_up_date': forms.widgets.DateInput(attrs={'type': 'date'})
         }
 
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            if getattr(self.instance, 'opportunity', None) is not None:
-                self.fields['contact'].queryset = Contact.objects.filter(opportunities=self.instance.opportunity)
-            else:
-                self.fields['contact'].queryset = Contact.objects.none()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['opportunity'].required = False
+        self.fields['contact'].required = False
+        if getattr(self.instance, 'opportunity', None) is not None:
+            self.fields['contact'].queryset = Contact.objects.filter(opportunities=self.instance.opportunity)
+        else:
+            self.fields['contact'].queryset = Contact.objects.all()
             
 
 class OpportunityForm(forms.ModelForm): 

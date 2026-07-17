@@ -128,7 +128,7 @@ def update_opportunity_stage(request, opportunity_id, stage_id):
     stage_transition.save()
     opportunity.stage = new_stage
     opportunity.save()
-    if opportunity.stage == "Abandoned":
+    if opportunity.stage.name == "Abandoned":
         return redirect("open-opportunities")
     return redirect("opportunity_view", opportunity_id=opportunity.id)
 
@@ -208,7 +208,34 @@ def all_contacts(request):
                       "page_title": "All Contacts", 
                       "contacts": contacts,
                       "records_count": contacts.count(),
+                      "today": datetime.date.today(),
                   })
+
+
+def add_follow_up_to_contact(request, contact_id):
+    contact = get_object_or_404(Contact, pk=contact_id)
+
+    if request.method == "POST":
+        form = FollowUpForm(request.POST)
+        if form.is_valid():
+            follow_up = form.save(commit=False)
+            follow_up.contact = contact
+            follow_up.opportunity = None
+            follow_up.completed = False
+            if not follow_up.follow_up_date:
+                follow_up.follow_up_date = datetime.date.today()
+            follow_up.save()
+        return redirect("all-contacts")
+
+    context = {
+        "page_title": f"Add Follow Up for {contact.name}",
+        "form": FollowUpForm(),
+    }
+    form = context["form"]
+    form.fields["contact"].initial = contact
+    form.fields["contact"].queryset = Contact.objects.filter(pk=contact.id)
+    return render(request, "add_follow_up.html", context)
+
 
 def contact_view(request, contact_id):
     contact = get_object_or_404(Contact, pk=contact_id)
@@ -226,7 +253,6 @@ def contact_view(request, contact_id):
 
 def current_follow_ups(request):
     """Show all FollowUps for the next 7 days."""
-    # follow_ups = FollowUp.objects.filter(follow_up_date__gte=datetime.date.today())
     follow_ups = FollowUp.objects.filter(
         Q(follow_up_date__gte=datetime.date.today()) |
         Q(completed=False)        
@@ -235,7 +261,7 @@ def current_follow_ups(request):
         request,
         "follow_ups.html",
         {
-            "page_title": "Opportunities to Follow Up", 
+            "page_title": "Follow Up", 
             "follow_ups": follow_ups,
             "records_count": follow_ups.count(),}
     )
@@ -269,4 +295,4 @@ def complete_follow_up(request, follow_up_id):
     follow_up.completed = True
     follow_up.save()
 
-    return redirect(opportunity_view, follow_up.opportunity.id)
+    return redirect("current-follow-ups")
