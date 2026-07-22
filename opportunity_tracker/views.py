@@ -53,12 +53,11 @@ def all_companies(request):
     )
 
 def open_opportunities(request):
-    """Show open opportunities"""
-
-    opportunities = Opportunity.objects.filter(stage__name__in=[
-        "Sent Resume",
-        "HR Interview",
-        "Technical Interview",]).order_by("company")
+    """Show open opportunities
+    """
+    opportunities = Opportunity.objects.exclude(
+        Q(stage__name__startswith="Rejected") | Q(stage__name="Abandoned")
+    ).order_by("company")
     return render(
         request,
         "opportunities.html",
