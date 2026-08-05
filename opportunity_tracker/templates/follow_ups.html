@@ -25,7 +25,10 @@
                                 </a></span>
                         {% endif %}
                         {% if f.contact %}
-                            <div > {{ f.contact.name }} {{ f.contact.phone }}</div>
+                            <p> {{ f.contact.name }} {{ f.contact.phone }}</p>
+                            {% if not f.contact.phone %}
+                                <p>{{ f.contact.email }}</p>
+                            {% endif %}
                         {% endif %}
                     </td>
                     <td>
