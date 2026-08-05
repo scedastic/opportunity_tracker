@@ -9,12 +9,54 @@
     <div class="table-border table-wrapper-scroll-y my-custom-scrollbar">
         <table class="table table-striped table-bordered dt-responsive nowrap mb-0">
             <thead>
-                <th>Date</th>
-                <th>Company Name</th>
-                <th>Position</th>
-                <th>Stack</th>
-                <th>$alary </th>
-                <th>Stage </th>
+                <th>
+                    <a href="?sort_by=date&sort_order={% if current_sort_by == 'date' and current_sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Date
+                        {% if current_sort_by == 'date' %}
+                            {% if current_sort_order == 'asc' %}▲{% else %}▼{% endif %}
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort_by=company_name&sort_order={% if current_sort_by == 'company_name' and current_sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Company Name
+                        {% if current_sort_by == 'company_name' %}
+                            {% if current_sort_order == 'asc' %}▲{% else %}▼{% endif %}
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort_by=job_title&sort_order={% if current_sort_by == 'job_title' and current_sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Position
+                        {% if current_sort_by == 'job_title' %}
+                            {% if current_sort_order == 'asc' %}▲{% else %}▼{% endif %}
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort_by=stack&sort_order={% if current_sort_by == 'stack' and current_sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Stack
+                        {% if current_sort_by == 'stack' %}
+                            {% if current_sort_order == 'asc' %}▲{% else %}▼{% endif %}
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort_by=salary&sort_order={% if current_sort_by == 'salary' and current_sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        $alary
+                        {% if current_sort_by == 'salary' %}
+                            {% if current_sort_order == 'asc' %}▲{% else %}▼{% endif %}
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort_by=stage&sort_order={% if current_sort_by == 'stage' and current_sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Stage
+                        {% if current_sort_by == 'stage' %}
+                            {% if current_sort_order == 'asc' %}▲{% else %}▼{% endif %}
+                        {% endif %}
+                    </a>
+                </th>
             </thead>
             <tbody>
                 {% for o in opportunities %}

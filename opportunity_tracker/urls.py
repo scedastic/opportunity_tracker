@@ -23,7 +23,7 @@ from .views import (
     all_contacts, contact_view, add_follow_up_to_contact,
     current_follow_ups,add_follow_up, complete_follow_up,
     add_notes_to_opportunity,
-    dashboard,
+    dashboard, stage_summary,
     )
 
 urlpatterns = [    
@@ -34,6 +34,7 @@ urlpatterns = [
     path('admin/dj-urls-panel/', include('dj_urls_panel.urls')),  # Django URLs Panel
     path("admin/", admin.site.urls),
     path("", dashboard, name="dashboard"),
+    path("stages/", stage_summary, name="stage-summary"),
 
     # Company URLs
     path("company/add/", add_company, name="add-company"),

@@ -1,19 +1,30 @@
 {% extends "base_vertical.html" %} {% block content %}
     <div class="row">
-        <div class="col-2">
-            Opportunities
+        <div class="col-4">
+            <h4>Opportunities by Stage</h4>
+
+            <table class="table table-striped table-bordered dt-responsive nowrap mb-0">
+                <thead>
+                    <th>Stage</th>
+                    <th>Count</th>
+                </thead>
+                <tbody>
+                    {% for stage in stage_counts %}
+                        <tr>
+                            <th>{{ stage.stage_name }}</th>
+                            <td>{{ stage.count }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="2">No opportunities found.</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <th>Total</th>
+                        <td>{{ total }}</td>
+                </tbody>
+            </table>
         </div>
     </div>
-    <div class="row">
-        <div class="col-2">
-            Contacts
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-2">
-            Follow Ups
-        </div>
-    </div>
-        
 
 {% endblock %}

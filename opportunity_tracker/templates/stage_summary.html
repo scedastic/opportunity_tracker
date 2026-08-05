@@ -1,0 +1,34 @@
+{% extends "base_vertical.html" %}
+{% block content %}
+    <div class="row">
+        <div class="col-8">
+            <table class="table table-striped table-bordered dt-responsive nowrap mb-0">
+                <thead>
+                    <tr>
+                        <th>Stage</th>
+                        <th>Count</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stage in stage_summary %}
+                        <tr>
+                            <td>{{ stage.name }}</td>
+                            <td>{{ stage.count }}</td>
+                            <td>{{ stage.percentage }}%</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3">No opportunities found.</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <th>Total</th>
+                        <th>{{ total_opportunities }}</th>
+                        <th>100%</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

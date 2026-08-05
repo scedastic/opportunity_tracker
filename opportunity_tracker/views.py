@@ -1,6 +1,7 @@
 import datetime
 from urllib import request, response
-from django.db.models import Q, Count
+from django.db.models import Q, Count, F
+from django.db.models.functions import Upper
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -10,8 +11,103 @@ from .models import Company, Opportunity, Notes, FollowUp, Contact, Stage, Stage
 ##################
 # Frontend views #
 ##################
+
+def _get_stage_summary_data():
+    stages = Stage.objects.exclude(name="Placeholder").order_by("rank")
+    total_opportunities = Opportunity.objects.exclude(stage__name="Placeholder").count()
+    stage_summary = []
+
+    for stage in stages:
+        count = Opportunity.objects.filter(stage=stage).count()
+        percentage = round((count / total_opportunities) * 100, 1) if total_opportunities else 0.0
+        stage_summary.append(
+            {
+                "name": stage.name,
+                "count": count,
+                "percentage": percentage,
+            }
+        )
+
+    return stage_summary, total_opportunities
+
+def _get_sort_options(request):
+    sort_by = request.GET.get("sort_by", "company_name").strip()
+    sort_order = request.GET.get("sort_order", "asc").strip().lower()
+
+    allowed_sort_by = {
+        "date": "initiation_date",
+        "company_name": "company_name",
+        "job_title": "job_title",
+        "stack": "stack",
+        "salary": "posted_minimum",
+        "stage": "stage__rank",
+    }
+
+    if sort_by not in allowed_sort_by:
+        sort_by = "company_name"
+
+    if sort_order not in {"asc", "desc"}:
+        sort_order = "asc"
+
+    return sort_by, sort_order
+
+
+def _apply_sort(queryset, sort_by, sort_order):
+    sort_map = {
+        "date": "initiation_date",
+        "company_name": "company_name",
+        "job_title": "job_title",
+        "stack": "stack",
+        "salary": "posted_minimum",
+        "stage": "stage__rank",
+    }
+
+    order_field = sort_map.get(sort_by, "company_name")
+    if sort_by in {"company_name", "job_title", "stack"}:
+        expression = Upper(order_field)
+    else:
+        expression = order_field
+
+    if sort_order == "desc":
+        if isinstance(expression, str):
+            return queryset.order_by(f"-{expression}")
+        return queryset.order_by(expression.desc())
+
+    if isinstance(expression, str):
+        return queryset.order_by(expression)
+    return queryset.order_by(expression)
+
+
 def dashboard(request):
-    return render(request, "dashboard.html", {"page_title": "Dashboard"})
+    stage_counts = (
+        Opportunity.objects.exclude(stage__name="Placeholder")
+        .values(stage_name=F("stage__name"))
+        .annotate(count=Count("id"))
+        .order_by("stage__rank")
+    )
+    total = sum(stage["count"] for stage in stage_counts)
+    return render(
+        request,
+        "dashboard.html",
+        {
+            "page_title": "Dashboard", 
+            "stage_counts": stage_counts, 
+            "total": total
+        },
+    )
+
+
+def stage_summary(request):
+    stage_summary, total_opportunities = _get_stage_summary_data()
+    return render(
+        request,
+        "stage_summary.html",
+        {
+            "page_title": "Stage Summary",
+            "stage_summary": stage_summary,
+            "total_opportunities": total_opportunities,
+        },
+    )
 
 def add_company(request):
     if request.method == "POST":
@@ -55,9 +151,11 @@ def all_companies(request):
 def open_opportunities(request):
     """Show open opportunities
     """
+    sort_by, sort_order = _get_sort_options(request)
     opportunities = Opportunity.objects.exclude(
         Q(stage__name__startswith="Rejected") | Q(stage__name="Abandoned")
-    ).order_by("company")
+    )
+    opportunities = _apply_sort(opportunities, sort_by, sort_order)
     return render(
         request,
         "opportunities.html",
@@ -65,6 +163,8 @@ def open_opportunities(request):
             "page_title": "Open Opportunities", 
             "opportunities": opportunities,
             "records_count": opportunities.count(),
+            "current_sort_by": sort_by,
+            "current_sort_order": sort_order,
         }
     )
     
@@ -84,7 +184,9 @@ def abandoned_opportunities(request):
     
 def all_opportunities(request):
     """Show all open opportunities, regardless of stage."""
-    opportunities = Opportunity.objects.all().order_by("stage").order_by("company")
+    sort_by, sort_order = _get_sort_options(request)
+    opportunities = Opportunity.objects.all()
+    opportunities = _apply_sort(opportunities, sort_by, sort_order)
     return render(
         request,
         "opportunities.html",
@@ -92,6 +194,8 @@ def all_opportunities(request):
             "page_title": "All Opportunities", 
             "opportunities": opportunities,
             "records_count": opportunities.count(),
+            "current_sort_by": sort_by,
+            "current_sort_order": sort_order,
         }
     )
 
