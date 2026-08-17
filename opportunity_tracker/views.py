@@ -55,7 +55,7 @@ def _get_sort_options(request):
 def _apply_sort(queryset, sort_by, sort_order):
     sort_map = {
         "date": "initiation_date",
-        "company_name": "company_name",
+        "company_name": "company__name",
         "job_title": "job_title",
         "stack": "stack",
         "salary": "posted_minimum",
