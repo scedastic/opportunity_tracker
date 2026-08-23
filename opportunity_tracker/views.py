@@ -31,8 +31,12 @@ def _get_stage_summary_data():
     return stage_summary, total_opportunities
 
 def _get_sort_options(request):
-    sort_by = request.GET.get("sort_by", "company_name").strip()
-    sort_order = request.GET.get("sort_order", "asc").strip().lower()
+    """Get the sorting options from the request parameters.
+    If the parameters are not provided or invalid, the default will be Initiation Date descending."""
+    default_sort_by = "date"
+    default_sort_order = "desc"
+    sort_by = request.GET.get("sort_by", default_sort_by).strip()
+    sort_order = request.GET.get("sort_order", default_sort_order).strip().lower()
 
     allowed_sort_by = {
         "date": "initiation_date",
