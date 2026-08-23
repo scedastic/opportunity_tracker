@@ -29,7 +29,6 @@ class Company(models.Model):
 
 class Opportunity(models.Model):
     id = models.AutoField(primary_key=True)
-    company_name = models.CharField(max_length=50, db_index=True, null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.PROTECT, default=202)
     job_title = models.CharField(max_length=50, default="SOFTWARE")
     posted_minimum = models.IntegerField(default=0)
@@ -47,7 +46,7 @@ class Opportunity(models.Model):
 
     class Meta:
         verbose_name_plural = "Opportunities"
-        ordering = [Upper("company_name")]
+        ordering = [Upper("company__name")]
 
 
 class StageHistory(models.Model):
@@ -68,7 +67,7 @@ class Notes(models.Model):
     note = models.TextField()
 
     def __str__(self):
-        return f"{self.opportunity.company_name} Note: {self.date}"
+        return f"{self.opportunity.company__name} Note: {self.date}"
 
     class Meta:
         verbose_name_plural = "Notes"

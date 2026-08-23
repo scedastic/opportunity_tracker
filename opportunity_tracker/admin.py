@@ -28,8 +28,8 @@ class ContactAdmin(admin.ModelAdmin):
 
 class NotesAdmin(admin.ModelAdmin):
     list_display = ('opportunity', 'date', 'note')
-    search_fields = ('opportunity__company_name', 'note')
-    list_filter = ('date','opportunity__company_name')
+    search_fields = ('opportunity__company', 'note')
+    list_filter = ('date','opportunity__company')
 
 
 class FollowUpAdmin(admin.ModelAdmin):
