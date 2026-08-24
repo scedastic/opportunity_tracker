@@ -120,9 +120,22 @@ def add_company(request):
             form.save()
             return redirect("dashboard")
     else:
-        context = {}
-        context["form"] = CompanyForm()
-    return render(request, "add_company.html", {"form": CompanyForm})
+        form = CompanyForm(initial={"name": request.GET.get("name", "").strip()})
+    return render(request, "add_company.html", {"form": form})
+
+def check_company(request):
+    company_name = request.POST.get("name", "").strip() if request.method == "POST" else ""
+    company = Company.objects.filter(name__iexact=company_name).first() if company_name else None
+    return render(
+        request,
+        "check_company.html",
+        {
+            "page_title": "Check Company",
+            "company_name": company_name,
+            "company_exists": company is not None if company_name else None,
+            "company_id": company.id if company else None,
+        },
+    )
 
 def company_view(request, company_id):
     """Show all opportunities for a given company."""

@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from .views import (
-    add_company, company_view, all_companies,
+    add_company, check_company, company_view, all_companies,
     all_opportunities, open_opportunities, opportunities_missing_contacts_follow_ups, 
     opportunity_view, recruiters, update_opportunity_stage,
     add_opportunity, abandoned_opportunities,
@@ -38,6 +38,7 @@ urlpatterns = [
 
     # Company URLs
     path("company/add/", add_company, name="add-company"),
+    path("company/check/", check_company, name="check-company"),
     path("companies/", all_companies, name="all-companies"),
     path("company/<int:company_id>/", company_view, name="company-view"),
 

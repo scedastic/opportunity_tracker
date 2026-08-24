@@ -86,6 +86,36 @@ class StageSummaryViewTests(TestCase):
         self.assertEqual(response.context["stage_summary"][1]["percentage"], 33.3)
 
 
+class CompanyCheckViewTests(TestCase):
+    def test_check_company_shows_form_without_a_result(self):
+        response = self.client.get(reverse("check-company"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNone(response.context["company_exists"])
+
+    def test_check_company_finds_name_case_insensitively(self):
+        company = Company.objects.create(name="Acme")
+
+        response = self.client.post(reverse("check-company"), {"name": " acme "})
+
+        self.assertTrue(response.context["company_exists"])
+        self.assertEqual(response.context["company_id"], company.id)
+        self.assertContains(response, f"acme exists in the database with ID {company.id}.")
+
+    def test_check_company_reports_missing_name(self):
+        response = self.client.post(reverse("check-company"), {"name": "Unknown Co"})
+
+        self.assertFalse(response.context["company_exists"])
+        self.assertContains(response, "Unknown Co does not exist in the database.")
+        self.assertContains(response, "Add Company")
+        self.assertContains(response, "?name=Unknown%20Co")
+
+    def test_add_company_prefills_name_from_query_string(self):
+        response = self.client.get(reverse("add-company"), {"name": "Unknown Co"})
+
+        self.assertEqual(response.context["form"].initial["name"], "Unknown Co")
+
+
 class OpportunitySortingTests(TestCase):
     def setUp(self):
         self.applied_stage = Stage.objects.create(name="Applied", rank=1)

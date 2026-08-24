@@ -1,0 +1,25 @@
+{% extends "base_vertical.html" %}
+
+{% block content %}
+    <form action="{% url 'check-company' %}" method="post" class="mb-3">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="company-name">Company Name</label>
+            <input id="company-name" name="name" type="text" value="{{ company_name }}" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Check</button>
+    </form>
+
+    {% if company_exists is not None %}
+        {% if company_exists %}
+            <div class="alert alert-success" role="status">
+                {{ company_name }} exists in the database with ID {{ company_id }}.
+            </div>
+        {% else %}
+            <div class="alert alert-warning" role="status">
+                {{ company_name }} does not exist in the database.
+                <a href="{% url 'add-company' %}?name={{ company_name|urlencode }}" class="btn btn-warning ml-2">Add Company</a>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}
