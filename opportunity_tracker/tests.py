@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.db import IntegrityError
 from django.urls import reverse
 
-from .models import Company, Opportunity, Contact, Stage
+from .models import Company, Opportunity, Contact, Stage, StageHistory
 
 
 class ContactOpportunityManyToManyTests(TestCase):
@@ -176,3 +176,46 @@ class OpportunitySortingTests(TestCase):
         self.assertEqual(response.context["current_sort_by"], "company_name")
         self.assertEqual(response.context["current_sort_order"], "asc")
         self.assertEqual(list(response.context["opportunities"]), [alpha_opportunity, beta_opportunity])
+
+
+class RejectedOpportunitiesViewTests(TestCase):
+    def test_lists_rejected_opportunities_with_time_to_rejection(self):
+        applied_stage = Stage.objects.create(name="Applied", rank=1)
+        rejected_stage = Stage.objects.create(name="Rejected - No Fit", rank=2)
+        company = Company.objects.create(name="Acme")
+        rejected_opportunity = Opportunity.objects.create(
+            company=company,
+            job_title="Backend Developer",
+            stack="Python",
+            requirements="Django",
+            stage=rejected_stage,
+            initiation_date=date(2024, 1, 1),
+        )
+        StageHistory.objects.create(
+            opportunity=rejected_opportunity,
+            new_stage=applied_stage,
+            transition_date=date(2024, 1, 1),
+        )
+        StageHistory.objects.create(
+            opportunity=rejected_opportunity,
+            new_stage=rejected_stage,
+            transition_date=date(2024, 1, 15),
+        )
+        active_opportunity = Opportunity.objects.create(
+            company=company,
+            job_title="Frontend Developer",
+            stack="JavaScript",
+            requirements="React",
+            stage=applied_stage,
+            initiation_date=date(2024, 1, 1),
+        )
+
+        response = self.client.get(reverse("rejected-opportunities"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["records_count"], 1)
+        listed_opportunity = response.context["opportunities"][0]
+        self.assertEqual(listed_opportunity, rejected_opportunity)
+        self.assertEqual(listed_opportunity.rejection_date, date(2024, 1, 15))
+        self.assertEqual(listed_opportunity.days_to_rejection, 14)
+        self.assertNotContains(response, active_opportunity.job_title)

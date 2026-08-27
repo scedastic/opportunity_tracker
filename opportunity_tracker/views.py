@@ -1,6 +1,6 @@
 import datetime
 from urllib import request, response
-from django.db.models import Q, Count, F
+from django.db.models import Q, Count, F, Min
 from django.db.models.functions import Upper
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -197,6 +197,33 @@ def abandoned_opportunities(request):
             "opportunities": opportunities,
             "records_count": opportunities.count(),
         }
+    )
+
+def rejected_opportunities(request):
+    """Show opportunities that were rejected."""
+    rejection_stage = Q(stagehistory__new_stage__name__startswith="Rejected")
+    opportunities = list(
+        Opportunity.objects.filter(stage__name__startswith="Rejected")
+        .annotate(rejection_date=Min("stagehistory__transition_date", filter=rejection_stage))
+        .select_related("company", "stage")
+        .order_by("company__name", "job_title")
+    )
+    for opportunity in opportunities:
+        if opportunity.initiation_date and opportunity.rejection_date:
+            opportunity.days_to_rejection = (
+                opportunity.rejection_date - opportunity.initiation_date
+            ).days
+        else:
+            opportunity.days_to_rejection = None
+
+    return render(
+        request,
+        "rejected_opportunities.html",
+        {
+            "page_title": "Rejected Opportunities",
+            "opportunities": opportunities,
+            "records_count": len(opportunities),
+        },
     )
     
 def all_opportunities(request):

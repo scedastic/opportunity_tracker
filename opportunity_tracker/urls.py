@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 from .views import (
     add_company, check_company, company_view, all_companies,
-    all_opportunities, open_opportunities, opportunities_missing_contacts_follow_ups, 
+    all_opportunities, open_opportunities, rejected_opportunities, opportunities_missing_contacts_follow_ups, 
     opportunity_view, recruiters, update_opportunity_stage,
     add_opportunity, abandoned_opportunities,
     all_contacts, contact_view, add_follow_up_to_contact,
@@ -50,6 +50,7 @@ urlpatterns = [
     path("opportunity/<int:opportunity_id>/update-stage/<int:stage_id>/", update_opportunity_stage, name="update-opportunity-stage"),
     path("all/", all_opportunities, name="all-opportunities"),
     path("open/", open_opportunities, name="open-opportunities"),
+    path("rejected/", rejected_opportunities, name="rejected-opportunities"),
     path("abandoned/", abandoned_opportunities, name="abandoned-opportunities"),
 
     # Contact URLs

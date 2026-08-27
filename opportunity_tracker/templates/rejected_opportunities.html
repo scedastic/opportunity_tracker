@@ -1,0 +1,27 @@
+{% extends "base_vertical.html" %} {% block content %}
+
+<div class="table-border table-wrapper-scroll-y my-custom-scrollbar">
+    <table class="table table-striped table-bordered dt-responsive nowrap mb-0">
+        <thead>
+            <tr>
+                <th>Company</th>
+                <th>Job Title</th>
+                <th>Initiation Date</th>
+                <th>Rejection Date</th>
+                <th>Days to Rejection</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for o in opportunities %}
+            <tr>
+                <td>{{ o.company }}</td>
+                <td><a href="{% url 'opportunity_view' o.id %}">{{ o.job_title }}</a></td>
+                <td>{{ o.initiation_date|default_if_none:"" }}</td>
+                <td>{{ o.rejection_date|default_if_none:"" }}</td>
+                <td>{{ o.days_to_rejection|default_if_none:"" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
