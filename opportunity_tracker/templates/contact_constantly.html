@@ -1,0 +1,30 @@
+{% extends "base_vertical.html" %}
+{% block content %}
+    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+        <table class="table table-striped table-bordered dt-responsive nowrap mb-0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Contacted Today</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in contacts %}
+                <tr>
+                    <td><a href="{% url 'contact-view' c.id %}">{{ c.name }}</a></td>
+                    <td>{{ c.phone }}</td>
+                    <td>{{ c.email }}</td>
+                    <td>
+                        <form method="post" action="{% url 'complete-contact-constantly' c.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-primary">Log Contact</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

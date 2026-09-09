@@ -12,3 +12,10 @@
 .table-wrapper-scroll-y {
     display: block;
 }
+
+.contact-detail-table {
+    height: auto !important;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
