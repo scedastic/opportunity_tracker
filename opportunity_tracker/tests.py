@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.db import IntegrityError
 from django.urls import reverse
 
-from .models import Company, Opportunity, Contact, Stage, StageHistory
+from .models import Company, Contact, ContactConstantly, FollowUp, Opportunity, Stage, StageHistory
 
 
 class ContactOpportunityManyToManyTests(TestCase):
@@ -114,6 +114,36 @@ class CompanyCheckViewTests(TestCase):
         response = self.client.get(reverse("add-company"), {"name": "Unknown Co"})
 
         self.assertEqual(response.context["form"].initial["name"], "Unknown Co")
+
+
+class ContactConstantlyViewTests(TestCase):
+    def test_lists_contact_constantly_contacts_and_logs_completed_follow_up(self):
+        frequent_contact = Contact.objects.create(name="Jane")
+        other_contact = Contact.objects.create(name="John")
+        ContactConstantly.objects.create(contact=frequent_contact)
+
+        response = self.client.get(reverse("contact-constantly"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(list(response.context["contacts"]), [frequent_contact])
+        self.assertContains(response, frequent_contact.name)
+        self.assertNotContains(response, other_contact.name)
+
+        response = self.client.post(
+            reverse("complete-contact-constantly", args=[frequent_contact.id])
+        )
+
+        self.assertRedirects(response, reverse("contact-constantly"))
+        follow_up = FollowUp.objects.get(contact=frequent_contact)
+        self.assertEqual(follow_up.follow_up_date, date.today())
+        self.assertTrue(follow_up.completed)
+
+    def test_cannot_log_follow_up_for_contact_not_marked_contact_constantly(self):
+        contact = Contact.objects.create(name="Jane")
+
+        self.client.post(reverse("complete-contact-constantly", args=[contact.id]))
+
+        self.assertFalse(FollowUp.objects.filter(contact=contact).exists())
 
 
 class OpportunitySortingTests(TestCase):
