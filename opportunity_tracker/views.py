@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import CompanyForm, FollowUpForm, NoteForm, OpportunityForm
-from .models import Company, Opportunity, Notes, FollowUp, Contact, Stage, StageHistory
+from .models import Company, Opportunity, Notes, FollowUp, Contact, ContactConstantly, Stage, StageHistory
 
 ##################
 # Frontend views #
@@ -358,6 +358,29 @@ def all_contacts(request):
                       "today": datetime.date.today(),
                   })
 
+def contact_constantly(request):
+    contacts = Contact.objects.filter(contactconstantly__isnull=False)
+    return render(
+        request,
+        "contact_constantly.html",
+        {
+            "page_title": "Contact Constantly",
+            "contacts": contacts,
+            "records_count": contacts.count(),
+        },
+    )
+
+
+def complete_contact_constantly(request, contact_id):
+    contact = get_object_or_404(Contact, pk=contact_id)
+    if request.method == "POST" and ContactConstantly.objects.filter(contact=contact).exists():
+        FollowUp.objects.create(
+            contact=contact,
+            follow_up_date=datetime.date.today(),
+            completed=True,
+        )
+    return redirect("contact-constantly")
+
 
 def add_follow_up_to_contact(request, contact_id):
     contact = get_object_or_404(Contact, pk=contact_id)
@@ -387,6 +410,7 @@ def add_follow_up_to_contact(request, contact_id):
 def contact_view(request, contact_id):
     contact = get_object_or_404(Contact, pk=contact_id)
     opportunities = Opportunity.objects.filter(contacts=contact)
+    follow_ups = FollowUp.objects.filter(contact=contact)
     return render(
         request, 
         "contact_detail.html",
@@ -395,6 +419,8 @@ def contact_view(request, contact_id):
             "contact": contact,
             "opportunities": opportunities,
             "opportunities_count": opportunities.count(),
+            "follow_ups": follow_ups,
+            "follow_ups_count": follow_ups.count(),
         }
     )
 
