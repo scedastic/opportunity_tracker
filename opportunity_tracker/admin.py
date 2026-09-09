@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Company, Opportunity, Contact, FollowUp, Notes, Stage, StageHistory
+from .models import Company, ContactConstantly, Opportunity, Contact, FollowUp, Notes, Stage, StageHistory
 
 admin.site.site_title = "Opportunity Tracker site administration" 
 admin.site.site_header = "Opportunity Tracker administration"
@@ -26,6 +26,10 @@ class ContactAdmin(admin.ModelAdmin):
     search_fields = ('company__name',)
 
 
+class ContactConstantlyAdmin(admin.ModelAdmin):
+    list_display = ('contact',)
+
+
 class NotesAdmin(admin.ModelAdmin):
     list_display = ('opportunity', 'date', 'note')
     search_fields = ('opportunity__company', 'note')
@@ -49,6 +53,7 @@ class StageHistoryAdmin(admin.ModelAdmin):
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(Opportunity, OpportunityAdmin)
 admin.site.register(Contact, ContactAdmin)
+admin.site.register(ContactConstantly, ContactConstantlyAdmin)
 admin.site.register(FollowUp, FollowUpAdmin)
 admin.site.register(Notes, NotesAdmin)
 admin.site.register(Stage, StageAdmin)

@@ -94,6 +94,7 @@ class Contact(models.Model):
     class Meta:
         ordering = [Upper("name")]
 
+
 class FollowUp(models.Model):
     id = models.AutoField(primary_key=True)
     opportunity = models.ForeignKey(Opportunity, on_delete=models.SET_NULL, null=True, blank=True)
@@ -109,3 +110,16 @@ class FollowUp(models.Model):
 
     class Meta:
         ordering = ["follow_up_date"]   
+
+
+class ContactConstantly(models.Model):
+    id = models.AutoField(primary_key=True)
+    contact = models.ForeignKey(Contact, on_delete=models.CASCADE)
+    last_contacted = models.DateField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.contact.name} - {self.last_contacted}"
+
+    class Meta:
+        verbose_name_plural = "Contact Constantly"
+        ordering = ["contact"]
